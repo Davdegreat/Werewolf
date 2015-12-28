@@ -6,6 +6,9 @@ import android.view.View;
 import android.widget.Button;
 
 import org.faudroids.werewolf.R;
+import org.faudroids.werewolf.core.GameManager;
+
+import javax.inject.Inject;
 
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -16,6 +19,9 @@ public class MainActivity extends AbstractActivity {
 
 	@InjectView(R.id.btn_test_roles) private Button testRolesButton;
 
+	@Inject
+	private GameManager mGameManager;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,5 +31,7 @@ public class MainActivity extends AbstractActivity {
 				startActivity(new Intent(MainActivity.this, ShowRolesActivity.class));
 			}
 		});
+
+		mGameManager.test();
 	}
 }

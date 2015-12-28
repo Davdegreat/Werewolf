@@ -25,4 +25,5 @@ dependencies {
     compile 'com.eftimoff:android-pathview:1.0.8@aar'
     compile 'org.roboguice:roboguice:3.0.1'
     provided 'org.roboguice:roboblender:3.0.1'
+    compile 'com.google.code.gson:gson:2.5'
 }
