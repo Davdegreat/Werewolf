@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -38,14 +39,14 @@ public class ShowRolesActivity extends AbstractActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		instructionsLayout.setVisibility(View.VISIBLE);
-		roleLayout.setVisibility(View.GONE);
+		roleLayout.setVisibility(View.INVISIBLE);
 
 		// setup click to reveal
 		revealButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				instructionsLayout.setVisibility(View.GONE);
+				instructionsLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_out));
+				roleLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_in));
 				roleLayout.setVisibility(View.VISIBLE);
 
 				Role role = getRandomRole();
@@ -65,9 +66,8 @@ public class ShowRolesActivity extends AbstractActivity {
 				instructionsLayout.postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						instructionsLayout.setVisibility(View.VISIBLE);
-						roleLayout.setVisibility(View.GONE);
-
+						instructionsLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_in));
+						roleLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_out));
 					}
 				}, 3000);
 			}
