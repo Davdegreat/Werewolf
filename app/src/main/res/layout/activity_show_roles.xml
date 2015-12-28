@@ -90,7 +90,7 @@
         android:id="@+id/btn_next"
         android:layout_width="@dimen/nav_button_size"
         android:layout_height="@dimen/nav_button_size"
-        android:background="@drawable/background_nav_button"
+        android:background="@drawable/background_nav_button_selector"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         >
@@ -108,7 +108,7 @@
         android:id="@+id/btn_back"
         android:layout_width="@dimen/nav_button_size"
         android:layout_height="@dimen/nav_button_size"
-        android:background="@drawable/background_nav_button"
+        android:background="@drawable/background_nav_button_selector"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         >

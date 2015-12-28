@@ -94,17 +94,18 @@ public class ShowRolesActivity extends AbstractActivity {
 						.interpolator(new AccelerateDecelerateInterpolator())
 						.start();
 
-				// hide role
 				instructionsLayout.postDelayed(new Runnable() {
 					@Override
 					public void run() {
+						// hide role
 						instructionsLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_in));
 						roleLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_out));
+						
+						// enable showing next player role
+						nextButton.setEnabled(true);
 					}
 				}, 3000);
 
-				// enable showing next player role
-				nextButton.setEnabled(true);
 			}
 		});
 
@@ -134,7 +135,7 @@ public class ShowRolesActivity extends AbstractActivity {
 
 		Player player = players.get(currentPlayerIdx);
 		nextButton.setEnabled(player.isSeen());
-		backButton.setEnabled(currentPlayerIdx != 0);
+		backButton.setVisibility(currentPlayerIdx != 0 ? View.VISIBLE : View.GONE);
 		if (getSupportActionBar() != null) getSupportActionBar().setTitle(player.getName());
 	}
 
