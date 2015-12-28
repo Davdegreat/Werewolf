@@ -18,6 +18,7 @@ import roboguice.inject.InjectView;
 public class MainActivity extends AbstractActivity {
 
 	@InjectView(R.id.btn_test_roles) private Button testRolesButton;
+	@InjectView(R.id.btn_new_game) private Button newGameButton;
 
 	@Inject
 	private GameManager mGameManager;
@@ -25,6 +26,14 @@ public class MainActivity extends AbstractActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		newGameButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(MainActivity.this, GameSetupActivity.class));
+			}
+		});
+
 		testRolesButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -32,6 +41,5 @@ public class MainActivity extends AbstractActivity {
 			}
 		});
 
-		mGameManager.test();
 	}
 }
