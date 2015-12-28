@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fillAfter="true"
+    >
+
+    <translate
+        android:duration="@integer/anim_swipe_role_duration"
+        android:fromXDelta="0%p"
+        android:toXDelta="-100%p"
+        />
+
+    <translate
+        android:fillEnabled="true"
+        android:fillBefore="false"
+        android:duration="@integer/anim_swipe_role_duration"
+        android:fromXDelta="200%p"
+        android:toXDelta="100%p"
+        android:startOffset="@integer/anim_swipe_role_duration"
+        />
+
+</set>

@@ -3,10 +3,12 @@ package org.faudroids.werewolf.ui;
 
 import android.graphics.Path;
 import android.os.Bundle;
+import android.support.annotation.AnimRes;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -66,21 +68,23 @@ public class ShowRolesActivity extends AbstractActivity {
 		setCurrentPlayerIdx(idx);
 
 		// start pulse animation on reveal button
-		revealButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.pulse));
+		revealButton.startAnimation(loadAnimation(R.anim.pulse));
 
 		// setup click to reveal
 		revealButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				revealButton.setEnabled(false);
+
 				// update player
 				Player player = players.get(currentPlayerIdx);
 				player.setIsSeen(true);
 				gameManager.savePlayers(players);
 
 				// toggle layouts
-				instructionsLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_out));
-				navLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_out));
-				roleLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_in));
+				instructionsLayout.startAnimation(loadAnimation(R.anim.fade_out));
+				navLayout.startAnimation(loadAnimation(R.anim.fade_out));
+				roleLayout.startAnimation(loadAnimation(R.anim.fade_in));
 				roleLayout.setVisibility(View.VISIBLE);
 
 				// show role text
@@ -93,17 +97,19 @@ public class ShowRolesActivity extends AbstractActivity {
 				iconView.setPaths(new ArrayList<Path>());
 				iconView.getPathAnimator()
 						.delay(100)
-						.duration(1000)
+						.duration(500)
 						.interpolator(new AccelerateDecelerateInterpolator())
 						.start();
 
 				instructionsLayout.postDelayed(new Runnable() {
 					@Override
 					public void run() {
+						revealButton.setEnabled(true);
+
 						// toggle layouts
-						instructionsLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_in));
-						navLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_in));
-						roleLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_out));
+						instructionsLayout.startAnimation(loadAnimation(R.anim.fade_in));
+						navLayout.startAnimation(loadAnimation(R.anim.fade_in));
+						roleLayout.startAnimation(loadAnimation(R.anim.fade_out));
 
 						// enable showing next player role
 						nextButton.setEnabled(true);
@@ -117,12 +123,14 @@ public class ShowRolesActivity extends AbstractActivity {
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				instructionsLayout.startAnimation(loadAnimation(R.anim.move_forward));
 				setCurrentPlayerIdx(currentPlayerIdx + 1);
 			}
 		});
 		backButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				instructionsLayout.startAnimation(loadAnimation(R.anim.move_backward));
 				setCurrentPlayerIdx(currentPlayerIdx - 1);
 			}
 		});
@@ -174,6 +182,11 @@ public class ShowRolesActivity extends AbstractActivity {
 
 	private ViewGroup getParent(View view) {
 		return (ViewGroup)view.getParent();
+	}
+
+
+	private Animation loadAnimation(@AnimRes int animationRes) {
+		return AnimationUtils.loadAnimation(this, animationRes);
 	}
 
 }
