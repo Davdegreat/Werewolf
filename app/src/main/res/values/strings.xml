@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Werewolf</string>
+
+    <string name="role_werewolf_name">Werewolf</string>
+    <string name="role_werewolf_goal">Take over the village</string>
+    <string name="role_villager_name">Villager</string>
+    <string name="role_villager_goal">Defend the village</string>
+    <string name="role_seer_name">Seer</string>
+    <string name="role_seer_goal">Find the werewolves</string>
+    <string name="role_doctor_name">Doctor</string>
+    <string name="role_doctor_goal">Heal the innocent</string>
+    <string name="role_hunter_name">Hunter</string>
+    <string name="role_hunter_goal">Shoot a werewolf</string>
+    <string name="role_witch_name">Witch</string>
+    <string name="role_witch_goal">Heal once, poison once</string>
+    <string name="role_priest_name">Priest</string>
+    <string name="role_priest_goal">Burn one werewolf</string>
+    <string name="role_amor_name">Amor</string>
+    <string name="role_amor_goal">Choose a love couple</string>
+
 </resources>
