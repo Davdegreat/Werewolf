@@ -1,23 +1,29 @@
 package org.faudroids.werwolf.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
 
 import org.faudroids.werwolf.R;
 
-import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 
 @ContentView(R.layout.activity_main)
-public class MainActivity extends RoboActivity {
+public class MainActivity extends AbstractActivity {
 
-	@InjectView(R.id.txt_hello) private TextView helloView;
+	@InjectView(R.id.btn_test_roles) private Button testRolesButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		helloView.setText("hello world");
+		testRolesButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(MainActivity.this, ShowRolesActivity.class));
+			}
+		});
 	}
 }
