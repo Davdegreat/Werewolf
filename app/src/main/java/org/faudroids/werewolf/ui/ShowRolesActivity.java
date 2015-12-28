@@ -39,8 +39,8 @@ public class ShowRolesActivity extends AbstractActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		roleLayout.setVisibility(View.INVISIBLE);
-
+		revealButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.pulse));
+		
 		// setup click to reveal
 		revealButton.setOnClickListener(new View.OnClickListener() {
 			@Override
