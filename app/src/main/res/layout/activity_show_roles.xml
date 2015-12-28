@@ -1,44 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="@dimen/margin_default"
     >
+    
+    <LinearLayout
+        android:id="@+id/layout_role"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
 
-    <com.eftimoff.androipathview.PathView
-        android:id="@+id/img_icon"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_gravity="center_horizontal"
-        app:pathColor="@android:color/black"
-        app:pathWidth="5dp"
-        app:svg="@raw/icon_hunter"
-        />
+        <include layout="@layout/role_icon" />
 
-    <TextView
-        android:id="@+id/txt_role_name"
+        <TextView
+            android:id="@+id/txt_role_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_default"
+            android:fontFamily="sans-serif-light"
+            android:text="Werewolf"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
+            android:textSize="30sp"
+            />
+
+        <TextView
+            android:id="@+id/txt_role_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_default_half"
+            android:text="Werewolf"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            />
+        
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_instructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/margin_default"
-        android:fontFamily="sans-serif-light"
-        android:text="Werewolf"
-        android:textAllCaps="true"
-        android:textColor="@android:color/black"
-        android:textSize="30sp"
-        />
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        >
 
-    <TextView
-        android:id="@+id/txt_role_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/margin_default_half"
-        android:text="Werewolf"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        />
+        <RelativeLayout
+            android:id="@+id/btn_reveal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/background_reveal_role"
+            android:layout_gravity="center_horizontal"
+            >
 
-</LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_touch_app"
+                android:layout_centerInParent="true"
+                />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/touch_to_reveal_role"
+            android:layout_margin="@dimen/margin_default"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-light"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

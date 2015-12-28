@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.eftimoff.androipathview.PathView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/img_icon"
+    android:layout_width="@dimen/role_icon_size"
+    android:layout_height="@dimen/role_icon_size"
+    android:layout_gravity="center_horizontal"
+    app:pathColor="@android:color/black"
+    app:pathWidth="5dp"
+    />
