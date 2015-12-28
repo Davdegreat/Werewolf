@@ -1,8 +1,13 @@
 package org.faudroids.werewolf.ui;
 
 
+import android.graphics.Path;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.eftimoff.androipathview.PathView;
@@ -20,30 +25,93 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.activity_show_roles)
 public class ShowRolesActivity extends AbstractActivity {
 
+	@InjectView(R.id.layout_instructions) private View instructionsLayout;
+	@InjectView(R.id.btn_reveal) private View revealButton;
+
+	@InjectView(R.id.layout_role) private View roleLayout;
 	@InjectView(R.id.img_icon) private PathView iconView;
 	@InjectView(R.id.txt_role_name) private TextView roleNameText;
 	@InjectView(R.id.txt_role_description) private TextView roleDescriptionText;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Role role = getRandomRole();
+		instructionsLayout.setVisibility(View.VISIBLE);
+		roleLayout.setVisibility(View.GONE);
 
-		roleNameText.setText(role.getNameId());
-		roleDescriptionText.setText(role.getGoalId());
+		// setup click to reveal
+		revealButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				instructionsLayout.setVisibility(View.GONE);
+				roleLayout.setVisibility(View.VISIBLE);
 
-		iconView.setSvgResource(role.getIconId());
-		iconView.getPathAnimator()
-				.delay(100)
-				.duration(2000)
-				.interpolator(new AccelerateDecelerateInterpolator())
-				.start();
+				Role role = getRandomRole();
+
+				roleNameText.setText(role.getNameId());
+				roleDescriptionText.setText(role.getGoalId());
+
+				assertPathView();
+				iconView.setSvgResource(role.getIconId());
+				iconView.setPaths(new ArrayList<Path>());
+				iconView.getPathAnimator()
+						.delay(100)
+						.duration(1000)
+						.interpolator(new AccelerateDecelerateInterpolator())
+						.start();
+
+				instructionsLayout.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						instructionsLayout.setVisibility(View.VISIBLE);
+						roleLayout.setVisibility(View.GONE);
+
+					}
+				}, 3000);
+			}
+		});
 	}
+
 
 	private Role getRandomRole() {
 		List<Role> roles = new ArrayList<>();
 		roles.addAll(EnumSet.allOf(Role.class));
 		return roles.get((int) (Math.random() * roles.size()));
 	}
+
+
+	/**
+	 * Hack to reset the path view internal state, since setting the svg source
+	 * only works when setting it the first time.
+	 */
+	private void assertPathView() {
+		ViewGroup parent = getParent(iconView);
+		PathView newIconView = (PathView) getLayoutInflater().inflate(R.layout.role_icon, null).findViewById(R.id.img_icon);
+		final int index = parent.indexOfChild(iconView);
+		removeView(iconView);
+		removeView(newIconView);
+
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+				getResources().getDimensionPixelSize(R.dimen.role_icon_size),
+				getResources().getDimensionPixelSize(R.dimen.role_icon_size));
+		layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+		parent.addView(newIconView, index, layoutParams);
+		iconView = newIconView;
+	}
+
+
+	private void removeView(View view) {
+		ViewGroup parent = getParent(view);
+		if(parent != null) {
+			parent.removeView(view);
+		}
+	}
+
+
+	private ViewGroup getParent(View view) {
+		return (ViewGroup)view.getParent();
+	}
+
 }

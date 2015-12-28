@@ -17,5 +17,6 @@
     <string name="role_priest_goal">Burn one werewolf</string>
     <string name="role_amor_name">Amor</string>
     <string name="role_amor_goal">Choose a love couple</string>
+    <string name="touch_to_reveal_role">Touch to reveal role</string>
 
 </resources>
