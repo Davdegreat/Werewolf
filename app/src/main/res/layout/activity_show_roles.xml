@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         app:pathColor="@android:color/black"
         app:pathWidth="5dp"
-        app:svg="@raw/icon_werewolf"
+        app:svg="@raw/icon_hunter"
         />
 
 </LinearLayout>
