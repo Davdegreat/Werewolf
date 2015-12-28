@@ -30,4 +30,6 @@
     <string name="cnf_autoassign_btn_label">Auto Assign</string>
     <string name="cnf_start_btn_label">Start Game</string>
 
+    <string name="default_player_name">Player %1$d</string>
+
 </resources>
