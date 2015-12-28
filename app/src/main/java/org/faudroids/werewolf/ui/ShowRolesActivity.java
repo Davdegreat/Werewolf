@@ -10,6 +10,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eftimoff.androipathview.PathView;
 
@@ -33,6 +34,8 @@ public class ShowRolesActivity extends AbstractActivity {
 	@InjectView(R.id.img_icon) private PathView iconView;
 	@InjectView(R.id.txt_role_name) private TextView roleNameText;
 	@InjectView(R.id.txt_role_description) private TextView roleDescriptionText;
+	@InjectView(R.id.btn_back) private View backButton;
+	@InjectView(R.id.btn_next) private View nextButton;
 
 
 	@Override
@@ -40,7 +43,7 @@ public class ShowRolesActivity extends AbstractActivity {
 		super.onCreate(savedInstanceState);
 
 		revealButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.pulse));
-		
+
 		// setup click to reveal
 		revealButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -70,6 +73,19 @@ public class ShowRolesActivity extends AbstractActivity {
 						roleLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_out));
 					}
 				}, 3000);
+			}
+		});
+
+		nextButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(ShowRolesActivity.this, "next!", Toast.LENGTH_SHORT).show();
+			}
+		});
+		backButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(ShowRolesActivity.this, "back!", Toast.LENGTH_SHORT).show();
 			}
 		});
 	}

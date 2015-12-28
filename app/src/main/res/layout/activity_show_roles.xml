@@ -86,4 +86,40 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/btn_next"
+        android:layout_width="@dimen/nav_button_size"
+        android:layout_height="@dimen/nav_button_size"
+        android:background="@drawable/background_nav_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_forward"
+            android:layout_centerInParent="true"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/btn_back"
+        android:layout_width="@dimen/nav_button_size"
+        android:layout_height="@dimen/nav_button_size"
+        android:background="@drawable/background_nav_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_centerInParent="true"
+            />
+
+    </RelativeLayout>
+
 </RelativeLayout>
