@@ -19,4 +19,6 @@
     <string name="role_amor_goal">Choose a love couple</string>
     <string name="touch_to_reveal_role">Touch to reveal role</string>
 
+    <string name="default_player_name">Player %1$d</string>
+
 </resources>

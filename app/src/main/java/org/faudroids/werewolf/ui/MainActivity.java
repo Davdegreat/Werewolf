@@ -20,8 +20,7 @@ public class MainActivity extends AbstractActivity {
 	@InjectView(R.id.btn_test_roles) private Button testRolesButton;
 	@InjectView(R.id.btn_new_game) private Button newGameButton;
 
-	@Inject
-	private GameManager mGameManager;
+	@Inject private GameManager gameManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +30,7 @@ public class MainActivity extends AbstractActivity {
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(MainActivity.this, GameSetupActivity.class));
+				gameManager.createRandomTestPlayers(10);
 			}
 		});
 

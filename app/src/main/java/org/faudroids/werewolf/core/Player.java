@@ -1,24 +1,25 @@
 package org.faudroids.werewolf.core;
 
-/**
- * Created by dex on 12/28/15.
- */
-public class Player {
 
-    private static int playerCount = 0;
+import android.support.annotation.NonNull;
+
+public class Player implements Comparable<Player> {
 
     private int id = 0;
     private boolean isSeen = false;
     private Role role = null;
+	private String name;
 
-    public Player(){
-        id = ++Player.playerCount;
-    }
+	// serialization constructor
+	public Player() {
+	}
 
-    public Player(Role r){
-        this();
-        role = r;
-    }
+	public Player(int id, boolean isSeen, Role role, String name) {
+		this.id = id;
+		this.isSeen = isSeen;
+		this.role = role;
+		this.name = name;
+	}
 
     public int getId() {
         return id;
@@ -44,6 +45,15 @@ public class Player {
         this.role = role;
     }
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
     public String toString(){
         String out = "Player:";
         out += " id: " + id;
@@ -52,5 +62,9 @@ public class Player {
         return out;
     }
 
+	@Override
+	public int compareTo(@NonNull Player another) {
+		return Integer.valueOf(id).compareTo(another.id);
+	}
 
 }

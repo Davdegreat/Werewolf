@@ -5,6 +5,8 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.faudroids.werewolf.R;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,8 +18,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 /**
  * Created by dex on 12/28/15.
@@ -91,24 +91,15 @@ public class GameManager {
         return gson.fromJson(json, collectionType);
     }
 
-    public void test(){
 
-        Random r = new Random();
-        List<Player> players = new ArrayList<Player>();
+	public void createRandomTestPlayers(int playerCount) {
+		Random random = new Random();
+		List<Player> players = new ArrayList<>();
+		for(int i = 0; i < playerCount; ++i) {
+			int randomRole = random.nextInt(Role.values().length);
+			players.add(new Player(i, false, Role.values()[randomRole], context.getString(R.string.default_player_name, (i + 1))));
+		}
+		savePlayers(players);
+	}
 
-        for(int i = 0; i <= 5; i++){
-            int randomRole = r.nextInt(Role.values().length);
-            Player p = new Player(Role.values()[randomRole]);
-            players.add(p);
-        }
-
-        Timber.d(players.toString());
-
-        savePlayers(players);
-
-        List<Player> myPlayers = getPlayers();
-
-        Timber.d(myPlayers.toString());
-
-    }
 }
