@@ -32,6 +32,7 @@ import timber.log.Timber;
 public class ShowRolesActivity extends AbstractActivity {
 
 	@InjectView(R.id.layout_instructions) private View instructionsLayout;
+	@InjectView(R.id.txt_player_name) private TextView playerNameText;
 	@InjectView(R.id.btn_reveal) private View revealButton;
 
 	@InjectView(R.id.layout_role) private View roleLayout;
@@ -65,7 +66,7 @@ public class ShowRolesActivity extends AbstractActivity {
 			finish();
 			return;
 		}
-		setCurrentPlayerIdx(idx);
+		setCurrentPlayerIdx(idx, false);
 
 		// start pulse animation on reveal button
 		revealButton.startAnimation(loadAnimation(R.anim.pulse));
@@ -97,7 +98,7 @@ public class ShowRolesActivity extends AbstractActivity {
 				iconView.setPaths(new ArrayList<Path>());
 				iconView.getPathAnimator()
 						.delay(100)
-						.duration(500)
+						.duration(1000)
 						.interpolator(new AccelerateDecelerateInterpolator())
 						.start();
 
@@ -124,20 +125,20 @@ public class ShowRolesActivity extends AbstractActivity {
 			@Override
 			public void onClick(View v) {
 				instructionsLayout.startAnimation(loadAnimation(R.anim.move_forward));
-				setCurrentPlayerIdx(currentPlayerIdx + 1);
+				setCurrentPlayerIdx(currentPlayerIdx + 1, true);
 			}
 		});
 		backButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				instructionsLayout.startAnimation(loadAnimation(R.anim.move_backward));
-				setCurrentPlayerIdx(currentPlayerIdx - 1);
+				setCurrentPlayerIdx(currentPlayerIdx - 1, true);
 			}
 		});
 	}
 
 
-	private void setCurrentPlayerIdx(int currentPlayerIdx) {
+	private void setCurrentPlayerIdx(int currentPlayerIdx, boolean delaySetPlayerName) {
 		this.currentPlayerIdx = currentPlayerIdx;
 		if (currentPlayerIdx >= players.size()) {
 			Timber.d("done viewing all players");
@@ -145,10 +146,17 @@ public class ShowRolesActivity extends AbstractActivity {
 			return;
 		}
 
-		Player player = players.get(currentPlayerIdx);
+		final Player player = players.get(currentPlayerIdx);
 		nextButton.setEnabled(player.isSeen());
 		backButton.setVisibility(currentPlayerIdx != 0 ? View.VISIBLE : View.GONE);
-		if (getSupportActionBar() != null) getSupportActionBar().setTitle(player.getName());
+		int delay = delaySetPlayerName ? getResources().getInteger(R.integer.anim_swipe_role_duration) : 0;
+		playerNameText.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				Timber.d("player name " + player.getName());
+				playerNameText.setText(player.getName());
+			}
+		}, delay);
 	}
 
 

@@ -7,15 +7,15 @@ import com.google.gson.reflect.TypeToken;
 
 import org.faudroids.werewolf.R;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 
 import javax.inject.Inject;
 
@@ -39,32 +39,12 @@ public class GameManager {
 
 
     public List<Player> loadPlayers(){
-        FileInputStream fis = null;
-        String json = "";
         try {
-            fis = context.openFileInput(PLAYERS_FILENAME);
-
-            Scanner sc = new Scanner(fis);
-
-            while(sc.hasNext()){
-                json += sc.next();
-            }
-
-            sc.close();
-            fis.close();
+			return gson.fromJson(new FileReader(new File(context.getFilesDir(), PLAYERS_FILENAME)), playersType);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
         }
-
-        if(json.isEmpty()){
-            return null;
-        }
-
-        return gson.fromJson(json, playersType);
     }
 
 

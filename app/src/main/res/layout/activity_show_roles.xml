@@ -49,6 +49,18 @@
         android:layout_centerInParent="true"
         >
 
+        <TextView
+            android:id="@+id/txt_player_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Player 0"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@android:color/black"
+            android:textSize="38sp"
+            android:fontFamily="sans-serif-light"
+            android:layout_marginBottom="@dimen/margin_default"
+            />
+
         <RelativeLayout
             android:layout_width="120dp"
             android:layout_height="120dp"
