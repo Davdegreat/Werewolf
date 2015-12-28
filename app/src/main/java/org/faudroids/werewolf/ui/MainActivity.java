@@ -30,13 +30,13 @@ public class MainActivity extends AbstractActivity {
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(MainActivity.this, GameSetupActivity.class));
-				gameManager.createRandomTestPlayers(10);
 			}
 		});
 
 		testRolesButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				gameManager.createRandomTestPlayers(10);
 				startActivity(new Intent(MainActivity.this, ShowRolesActivity.class));
 			}
 		});

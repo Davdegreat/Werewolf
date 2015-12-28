@@ -19,6 +19,8 @@ import java.util.Scanner;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 /**
  * Created by dex on 12/28/15.
  */
@@ -26,42 +28,19 @@ public class GameManager {
 
     private final String PLAYERS_FILENAME = "Players";
 
-    Context context = null;
+    private final Context context;
+	private final Gson gson = new Gson();
+	private final Type playersType = new TypeToken<List<Player>>(){}.getType();
 
     @Inject
-    GameManager(Context ctx){
-        context = ctx;
+    GameManager(Context context){
+        this.context = context;
     }
 
-    public boolean savePlayers(List<Player> players){
 
-        Gson gson = new Gson();
-
-        Type collectionType = new TypeToken<List<Player>>(){}.getType();
-        String json = gson.toJson(players, collectionType);
-
-        FileOutputStream fos = null;
-
-        try {
-            fos = context.openFileOutput(PLAYERS_FILENAME, Context.MODE_PRIVATE);
-            fos.write(json.getBytes());
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
-    }
-
-    public List<Player> getPlayers(){
-
+    public List<Player> loadPlayers(){
         FileInputStream fis = null;
         String json = "";
-
         try {
             fis = context.openFileInput(PLAYERS_FILENAME);
 
@@ -85,11 +64,23 @@ public class GameManager {
             return null;
         }
 
-        Gson gson = new Gson();
-
-        Type collectionType = new TypeToken<List<Player>>(){}.getType();
-        return gson.fromJson(json, collectionType);
+        return gson.fromJson(json, playersType);
     }
+
+
+	public boolean savePlayers(List<Player> players) {
+		String json = gson.toJson(players, playersType);
+		FileOutputStream fos;
+		try {
+			fos = context.openFileOutput(PLAYERS_FILENAME, Context.MODE_PRIVATE);
+			fos.write(json.getBytes());
+			fos.close();
+		} catch (IOException e) {
+			Timber.e(e, "failed to save players");
+			return false;
+		}
+		return true;
+	}
 
 
 	public void createRandomTestPlayers(int playerCount) {

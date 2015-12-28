@@ -10,19 +10,21 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.eftimoff.androipathview.PathView;
 
 import org.faudroids.werewolf.R;
-import org.faudroids.werewolf.core.Role;
+import org.faudroids.werewolf.core.GameManager;
+import org.faudroids.werewolf.core.Player;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
+import timber.log.Timber;
 
 @ContentView(R.layout.activity_show_roles)
 public class ShowRolesActivity extends AbstractActivity {
@@ -37,28 +39,54 @@ public class ShowRolesActivity extends AbstractActivity {
 	@InjectView(R.id.btn_back) private View backButton;
 	@InjectView(R.id.btn_next) private View nextButton;
 
+	@Inject private GameManager gameManager;
+	private List<Player> players;
+	private int currentPlayerIdx;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// get current player
+		players = gameManager.loadPlayers();
+		int idx = -1;
+		for (int i = 0; i < players.size(); ++i) {
+			if (!players.get(i).isSeen()) {
+				idx = i;
+				break;
+			}
+		}
+		if (idx == -1) {
+			Timber.d("all players have seen their role");
+			finish();
+			return;
+		}
+		setCurrentPlayerIdx(idx);
+
+		// start pulse animation on reveal button
 		revealButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.pulse));
 
 		// setup click to reveal
 		revealButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				// update player
+				Player player = players.get(currentPlayerIdx);
+				player.setIsSeen(true);
+				gameManager.savePlayers(players);
+
+				// show role
 				instructionsLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_out));
 				roleLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_in));
 				roleLayout.setVisibility(View.VISIBLE);
 
-				Role role = getRandomRole();
+				// show role text
+				roleNameText.setText(player.getRole().getNameId());
+				roleDescriptionText.setText(player.getRole().getGoalId());
 
-				roleNameText.setText(role.getNameId());
-				roleDescriptionText.setText(role.getGoalId());
-
+				// show role icon
 				assertPathView();
-				iconView.setSvgResource(role.getIconId());
+				iconView.setSvgResource(player.getRole().getIconId());
 				iconView.setPaths(new ArrayList<Path>());
 				iconView.getPathAnimator()
 						.delay(100)
@@ -66,6 +94,7 @@ public class ShowRolesActivity extends AbstractActivity {
 						.interpolator(new AccelerateDecelerateInterpolator())
 						.start();
 
+				// hide role
 				instructionsLayout.postDelayed(new Runnable() {
 					@Override
 					public void run() {
@@ -73,28 +102,40 @@ public class ShowRolesActivity extends AbstractActivity {
 						roleLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_out));
 					}
 				}, 3000);
+
+				// enable showing next player role
+				nextButton.setEnabled(true);
 			}
 		});
 
+		// set nav buttons
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(ShowRolesActivity.this, "next!", Toast.LENGTH_SHORT).show();
+				setCurrentPlayerIdx(currentPlayerIdx + 1);
 			}
 		});
 		backButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(ShowRolesActivity.this, "back!", Toast.LENGTH_SHORT).show();
+				setCurrentPlayerIdx(currentPlayerIdx - 1);
 			}
 		});
 	}
 
 
-	private Role getRandomRole() {
-		List<Role> roles = new ArrayList<>();
-		roles.addAll(EnumSet.allOf(Role.class));
-		return roles.get((int) (Math.random() * roles.size()));
+	private void setCurrentPlayerIdx(int currentPlayerIdx) {
+		this.currentPlayerIdx = currentPlayerIdx;
+		if (currentPlayerIdx >= players.size()) {
+			Timber.d("done viewing all players");
+			finish();
+			return;
+		}
+
+		Player player = players.get(currentPlayerIdx);
+		nextButton.setEnabled(player.isSeen());
+		backButton.setEnabled(currentPlayerIdx != 0);
+		if (getSupportActionBar() != null) getSupportActionBar().setTitle(player.getName());
 	}
 
 
