@@ -36,6 +36,8 @@ public class ShowRolesActivity extends AbstractActivity {
 	@InjectView(R.id.img_icon) private PathView iconView;
 	@InjectView(R.id.txt_role_name) private TextView roleNameText;
 	@InjectView(R.id.txt_role_description) private TextView roleDescriptionText;
+
+	@InjectView(R.id.layout_nav) private View navLayout;
 	@InjectView(R.id.btn_back) private View backButton;
 	@InjectView(R.id.btn_next) private View nextButton;
 
@@ -75,8 +77,9 @@ public class ShowRolesActivity extends AbstractActivity {
 				player.setIsSeen(true);
 				gameManager.savePlayers(players);
 
-				// show role
+				// toggle layouts
 				instructionsLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_out));
+				navLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_out));
 				roleLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_in));
 				roleLayout.setVisibility(View.VISIBLE);
 
@@ -97,10 +100,11 @@ public class ShowRolesActivity extends AbstractActivity {
 				instructionsLayout.postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						// hide role
+						// toggle layouts
 						instructionsLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_in));
+						navLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_in));
 						roleLayout.startAnimation(AnimationUtils.loadAnimation(ShowRolesActivity.this, R.anim.fade_out));
-						
+
 						// enable showing next player role
 						nextButton.setEnabled(true);
 					}
