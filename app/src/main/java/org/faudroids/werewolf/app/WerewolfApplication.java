@@ -1,13 +1,13 @@
-package org.faudroids.werwolf.app;
+package org.faudroids.werewolf.app;
 
 import android.app.Application;
 
-import org.faudroids.werwolf.BuildConfig;
+import org.faudroids.werewolf.BuildConfig;
 
 import roboguice.RoboGuice;
 import timber.log.Timber;
 
-public class WerwolfApplication extends Application {
+public class WerewolfApplication extends Application {
 
 	@Override
 	public void onCreate() {

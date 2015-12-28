@@ -1,4 +1,4 @@
-package org.faudroids.werwolf.ui;
+package org.faudroids.werewolf.ui;
 
 
 import roboguice.activity.RoboActionBarActivity;

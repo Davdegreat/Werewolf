@@ -1,4 +1,4 @@
-package org.faudroids.werwolf.ui;
+package org.faudroids.werewolf.ui;
 
 
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.eftimoff.androipathview.PathView;
 
-import org.faudroids.werwolf.R;
+import org.faudroids.werewolf.R;
 
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;

@@ -1,11 +1,11 @@
-package org.faudroids.werwolf.ui;
+package org.faudroids.werewolf.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import org.faudroids.werwolf.R;
+import org.faudroids.werewolf.R;
 
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
