@@ -13,6 +13,7 @@ import org.faudroids.werewolf.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -126,13 +127,41 @@ public class GameSetupActivity extends AbstractActivity {
                 }
 
                 mToBeAssignedCount = playerCount - assignedPlayerCount;
+                if(mToBeAssignedCount >= 0) {
+                    for (NumberPicker np : allPickers) {
+                        np.setMinValue(0);
+                        np.setMaxValue(np.getValue() + mToBeAssignedCount);
+                        np.setWrapSelectorWheel(false);
+                    }
+                } else {
+                    // too many assigned roles => players.size() < assignedRoles.size()
+                   // iterate through assigned Roles trying to decrement special roles first
+                  ListIterator<NumberPicker> it = allPickers.listIterator(allPickers.size());
+                   while(it.hasPrevious()){
+                       NumberPicker currPicker = it.previous();
+                       int currVal = currPicker.getValue();
+                       if(currVal > 0){
+
+                           if(mToBeAssignedCount + currVal < 0){
+                               mToBeAssignedCount += currVal;
+                               currVal = 0;
+                           } else {
+                               currVal += mToBeAssignedCount;
+                               mToBeAssignedCount = 0;
+                           }
+
+                           currPicker.setMinValue(0);
+                           currPicker.setMaxValue(currVal);
+                           currPicker.setValue(currVal);
+                           currPicker.setWrapSelectorWheel(false);
+                       }
+
+                       if(mToBeAssignedCount >= 0){ break; }
+                   }
+                }
+
                 mToBeAssignedTextView.setText("" + mToBeAssignedCount);
 
-                for(NumberPicker np : allPickers){
-                    np.setMinValue(0);
-                    np.setMaxValue(np.getValue() + mToBeAssignedCount);
-                    np.setWrapSelectorWheel(false);
-                }
             }
         };
 
@@ -145,7 +174,7 @@ public class GameSetupActivity extends AbstractActivity {
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mToBeAssignedCount > 0){
+                if (mToBeAssignedCount > 0) {
                     new AlertDialog.Builder(GameSetupActivity.this)
                             .setMessage("There are " + mToBeAssignedCount + " players left to be assiged. Proceed anyway?")
                             .setCancelable(false)
