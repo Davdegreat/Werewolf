@@ -1,6 +1,7 @@
 package org.faudroids.werewolf.ui;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -10,10 +11,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.faudroids.werewolf.R;
+import org.faudroids.werewolf.core.GameManager;
+import org.faudroids.werewolf.core.Player;
+import org.faudroids.werewolf.core.Role;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+
+import javax.inject.Inject;
 
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -36,6 +42,9 @@ public class GameSetupActivity extends AbstractActivity {
     @InjectView(R.id.cnf_amor_count_picker) private NumberPicker mAmorCountPicker;
 
     @InjectView(R.id.cnf_start_btn) private Button mStartButton;
+
+    @Inject
+    private GameManager mGameManager;
 
     private final int DEFAULT_PLAYER_COUNT = 10;
 
@@ -180,17 +189,58 @@ public class GameSetupActivity extends AbstractActivity {
                             .setCancelable(false)
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    //hExampleActivity.this.finish();
+                                    startGame();
                                 }
                             })
                             .setNegativeButton("No", null)
                             .show();
                 } else {
-                    Toast.makeText(GameSetupActivity.this, "Game Starts Now!", Toast.LENGTH_LONG).show();
+                    startGame();
                 }
 
             }
         });
+
+    }
+
+    private void startGame() {
+        List<Player> players = new ArrayList<>(mPlayerCountPicker.getValue());
+
+        int playerId = 1;
+
+        for(int i = 0; i < mWerewolfCountPicker.getValue(); i++){
+            players.add(new Player(playerId++, false, Role.WEREWOLF, null));
+        }
+        for(int i = 0; i < mVillagerCountPicker.getValue(); i++){
+            players.add(new Player(playerId++, false, Role.VILLAGER, null));
+        }
+        for(int i = 0; i < mSeerCountPicker.getValue(); i++){
+            players.add(new Player(playerId++, false, Role.SEER, null));
+        }
+        for(int i = 0; i < mDoctorCountPicker.getValue(); i++){
+            players.add(new Player(playerId++, false, Role.DOCTOR, null));
+        }
+        for(int i = 0; i < mHunterCountPicker.getValue(); i++){
+            players.add(new Player(playerId++, false, Role.HUNTER, null));
+        }
+        for(int i = 0; i < mWitchCountPicker.getValue(); i++){
+            players.add(new Player(playerId++, false, Role.WITCH, null));
+        }
+        for(int i = 0; i < mPriestCountPicker.getValue(); i++){
+            players.add(new Player(playerId++, false, Role.PRIEST, null));
+        }
+        for(int i = 0; i < mAmorCountPicker.getValue(); i++){
+            players.add(new Player(playerId++, false, Role.AMOR, null));
+        }
+
+        if(mGameManager.savePlayers(players)){
+            Intent intent = new Intent(GameSetupActivity.this, ShowRolesActivity.class);
+            GameSetupActivity.this.finish();
+            GameSetupActivity.this.startActivity(intent);
+        } else {
+            Toast.makeText(this, "Something went wrong...", Toast.LENGTH_LONG).show();
+        }
+
 
     }
 }
