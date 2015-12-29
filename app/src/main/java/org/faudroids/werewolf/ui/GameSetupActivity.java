@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
+
 @ContentView(R.layout.activity_game_setup)
 public class GameSetupActivity extends AbstractActivity {
 
@@ -143,7 +144,7 @@ public class GameSetupActivity extends AbstractActivity {
                         np.setWrapSelectorWheel(false);
                     }
                 } else {
-                    // too many assigned roles => players.size() < assignedRoles.size()
+                   // too many assigned roles => players.size() < assignedRoles.size()
                    // iterate through assigned Roles trying to decrement special roles first
                   ListIterator<NumberPicker> it = allPickers.listIterator(allPickers.size());
                    while(it.hasPrevious()){

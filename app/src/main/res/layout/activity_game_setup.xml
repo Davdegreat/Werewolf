@@ -32,7 +32,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"
+        >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,11 +55,18 @@
             android:padding="5dp"
             android:layout_weight="1" />
 
-        <NumberPicker
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/cnf_player_count_picker"
-            android:layout_weight="1" />
+            android:gravity="center_horizontal"
+            android:layout_weight="1" >
+
+            <NumberPicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cnf_player_count_picker"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -82,11 +91,18 @@
             android:padding="5dp"
             android:layout_weight="1" />
 
-        <NumberPicker
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/cnf_werewolf_count_picker"
-            android:layout_weight="1"/>
+            android:gravity="center_horizontal"
+            android:layout_weight="1" >
+
+            <NumberPicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cnf_werewolf_count_picker"/>
+
+        </LinearLayout>
     </LinearLayout>
 
         <LinearLayout
@@ -103,11 +119,19 @@
                 android:padding="5dp"
                 android:layout_weight="1" />
 
-            <NumberPicker
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/cnf_villager_count_picker"
-                android:layout_weight="1"/>
+                android:gravity="center_horizontal"
+                android:layout_weight="1" >
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cnf_villager_count_picker"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -124,11 +148,17 @@
                 android:padding="5dp"
                 android:layout_weight="1" />
 
-            <NumberPicker
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/cnf_seer_count_picker"
-                android:layout_weight="1"/>
+                android:gravity="center_horizontal"
+                android:layout_weight="1" >
+
+            <NumberPicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cnf_seer_count_picker" />
+               </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -145,11 +175,17 @@
                 android:padding="5dp"
                 android:layout_weight="1" />
 
-            <NumberPicker
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/cnf_doctor_count_picker"
-                android:layout_weight="1"/>
+                android:gravity="center_horizontal"
+                android:layout_weight="1" >
+
+            <NumberPicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cnf_doctor_count_picker" />
+                </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -166,11 +202,18 @@
                 android:padding="5dp"
                 android:layout_weight="1" />
 
-            <NumberPicker
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/cnf_hunter_count_picker"
-                android:layout_weight="1"/>
+                android:gravity="center_horizontal"
+                android:layout_weight="1" >
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cnf_hunter_count_picker" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -187,11 +230,18 @@
                 android:padding="5dp"
                 android:layout_weight="1" />
 
-            <NumberPicker
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/cnf_witch_count_picker"
-                android:layout_weight="1"/>
+                android:gravity="center_horizontal"
+                android:layout_weight="1" >
+
+            <NumberPicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cnf_witch_count_picker" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -208,11 +258,18 @@
                 android:padding="5dp"
                 android:layout_weight="1" />
 
-            <NumberPicker
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/cnf_priest_count_picker"
-                android:layout_weight="1"/>
+                android:gravity="center_horizontal"
+                android:layout_weight="1" >
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cnf_priest_count_picker" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -229,11 +286,19 @@
                 android:padding="5dp"
                 android:layout_weight="1" />
 
-            <NumberPicker
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/cnf_amor_count_picker"
-                android:layout_weight="1"/>
+                android:gravity="center_horizontal"
+                android:layout_weight="1" >
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cnf_amor_count_picker" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <Button
@@ -242,6 +307,6 @@
             android:id="@+id/cnf_start_btn"
             android:text="@string/cnf_start_btn_label" />
 
-</LinearLayout>
+    </LinearLayout>
     </ScrollView>
 </RelativeLayout>
