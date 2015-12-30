@@ -1,9 +1,13 @@
 package org.faudroids.werewolf.app;
 
 import android.app.Application;
+import android.util.Log;
+
+import com.crashlytics.android.Crashlytics;
 
 import org.faudroids.werewolf.BuildConfig;
 
+import io.fabric.sdk.android.Fabric;
 import roboguice.RoboGuice;
 import timber.log.Timber;
 
@@ -23,14 +27,12 @@ public class WerewolfApplication extends Application {
 		if (BuildConfig.DEBUG) {
 			Timber.plant(new Timber.DebugTree());
 		} else {
-			throw new IllegalStateException("crash reporting not configured");
-			// Fabric.with(this, new Crashlytics());
-			// Timber.plant(new CrashReportingTree());
+			Fabric.with(this, new Crashlytics());
+			Timber.plant(new CrashReportingTree());
 		}
 	}
 
 
-	/*
 	private static final class CrashReportingTree extends Timber.Tree {
 
 		@Override
@@ -77,6 +79,5 @@ public class WerewolfApplication extends Application {
 		}
 
 	}
-	*/
 
 }

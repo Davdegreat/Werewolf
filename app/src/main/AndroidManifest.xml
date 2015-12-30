@@ -2,6 +2,8 @@
 <manifest package="org.faudroids.werewolf"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".app.WerewolfApplication"
         android:allowBackup="true"
@@ -18,6 +20,9 @@
         <activity android:name=".ui.ShowRolesActivity" />
         <activity android:name=".ui.GameSetupActivity" />
         <activity android:name=".ui.PlayersOverviewActivity" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="d24b6175dc50a0705e30d49f9f580ca61cbddbed" />
     </application>
 
 </manifest>

@@ -10,7 +10,7 @@ abstract class AbstractActivity extends RoboActionBarActivity {
 
 	private final boolean showActionBarBackButton;
 
-	AbstractActivity() {
+	public AbstractActivity() {
 		this(false);
 	}
 
