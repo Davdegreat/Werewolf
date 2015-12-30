@@ -256,13 +256,10 @@ public class ShowRolesActivity extends AbstractActivity {
 					errorView.setText(R.string.error_empty_name);
 					isError = true;
 				}
-				for (int i = 0; i < allPlayers.size(); ++i) {
-					if (i == currentPlayerIdx) continue;
-					if (allPlayers.get(i).getName().equals(newPlayerName)) {
-						errorView.setText(R.string.error_duplicate_name);
-						isError = true;
-						break;
-					}
+				Player playerWithSameName = gameManager.findPlayerByName(newPlayerName);
+				if (playerWithSameName != null && playerWithSameName.getId() != getCurrentPlayer().getId()) {
+					errorView.setText(R.string.error_duplicate_name);
+					isError = true;
 				}
 				errorView.setVisibility(isError ? View.VISIBLE : View.GONE);
 				okBtn.setEnabled(!isError);

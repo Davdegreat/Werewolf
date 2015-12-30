@@ -21,9 +21,6 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-/**
- * Created by dex on 12/28/15.
- */
 public class GameManager {
 
     private final String PLAYERS_FILENAME = "Players";
@@ -32,6 +29,8 @@ public class GameManager {
 	private final Gson gson = new Gson();
 	private final Type playersType = new TypeToken<List<Player>>(){}.getType();
 
+	private List<Player> playersCache = null;
+
     @Inject
     GameManager(Context context){
         this.context = context;
@@ -39,8 +38,10 @@ public class GameManager {
 
 
     public List<Player> loadPlayers(){
+		if (playersCache != null) return playersCache;
         try {
-			return gson.fromJson(new FileReader(new File(context.getFilesDir(), PLAYERS_FILENAME)), playersType);
+			playersCache = gson.fromJson(new FileReader(new File(context.getFilesDir(), PLAYERS_FILENAME)), playersType);
+			return playersCache;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;
@@ -49,6 +50,7 @@ public class GameManager {
 
 
 	public boolean savePlayers(List<Player> players) {
+		this.playersCache = players;
 		String json = gson.toJson(players, playersType);
 		FileOutputStream fos;
 		try {
@@ -60,6 +62,15 @@ public class GameManager {
 			return false;
 		}
 		return true;
+	}
+
+
+	public Player findPlayerByName(String name) {
+		loadPlayers();
+		for (Player player : playersCache) {
+			if (player.getName().equalsIgnoreCase(name)) return player;
+		}
+		return null;
 	}
 
 
