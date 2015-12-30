@@ -151,15 +151,13 @@ public class ShowRolesActivity extends AbstractActivity {
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				instructionsLayout.startAnimation(loadAnimation(R.anim.move_forward));
-				setCurrentPlayerIdx(currentPlayerIdx + 1, true);
+				goToNextRole();
 			}
 		});
 		backButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				instructionsLayout.startAnimation(loadAnimation(R.anim.move_backward));
-				setCurrentPlayerIdx(currentPlayerIdx - 1, true);
+				goToPreviousRole();
 			}
 		});
 
@@ -179,6 +177,18 @@ public class ShowRolesActivity extends AbstractActivity {
 	}
 
 
+	private void goToNextRole() {
+		instructionsLayout.startAnimation(loadAnimation(R.anim.move_forward));
+		setCurrentPlayerIdx(currentPlayerIdx + 1, true);
+	}
+
+
+	private void goToPreviousRole() {
+		instructionsLayout.startAnimation(loadAnimation(R.anim.move_backward));
+		setCurrentPlayerIdx(currentPlayerIdx - 1, true);
+	}
+
+
 	private void setCurrentPlayerIdx(int currentPlayerIdx, boolean delaySetPlayerName) {
 		this.currentPlayerIdx = currentPlayerIdx;
 		if (currentPlayerIdx >= allPlayers.size()) {
@@ -195,7 +205,6 @@ public class ShowRolesActivity extends AbstractActivity {
 		playerNameText.postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				Timber.d("player name " + player.getName());
 				playerNameText.setText(player.getName());
 			}
 		}, delay);
@@ -265,6 +274,23 @@ public class ShowRolesActivity extends AbstractActivity {
 				dialog.dismiss();
 			}
 		});
+	}
+
+
+	@Override
+	public void onBackPressed() {
+		// if only one player then exit
+		if (singlePlayer != null) {
+			super.onBackPressed();
+			return;
+		}
+
+		// if multiple players try going back one role
+		if (backButton.getVisibility() == View.VISIBLE && backButton.isEnabled()) {
+			goToPreviousRole();
+		} else {
+			super.onBackPressed();
+		}
 	}
 
 
