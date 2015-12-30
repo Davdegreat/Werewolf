@@ -30,6 +30,10 @@
     <string name="cnf_autoassign_btn_label">Auto Assign</string>
     <string name="cnf_start_btn_label">Start Game</string>
 
+    <string name="change_player_name">Change player name</string>
     <string name="default_player_name">Player %1$d</string>
+    <string name="change_player_name_hint">Player name</string>
+    <string name="error_empty_name">Name cannot be empty</string>
+    <string name="error_duplicate_name">Name already exists</string>
 
 </resources>

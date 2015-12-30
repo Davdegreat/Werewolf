@@ -49,17 +49,34 @@
         android:layout_centerInParent="true"
         >
 
-        <TextView
-            android:id="@+id/txt_player_name"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Player 0"
+            android:orientation="horizontal"
             android:layout_gravity="center_horizontal"
-            android:textColor="@android:color/black"
-            android:textSize="38sp"
-            android:fontFamily="sans-serif-light"
             android:layout_marginBottom="@dimen/margin_default"
-            />
+            >
+
+            <TextView
+                android:id="@+id/txt_player_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Player 0"
+                android:textColor="@android:color/black"
+                android:textSize="38sp"
+                android:fontFamily="sans-serif-light"
+                />
+
+            <ImageView
+                android:id="@+id/btn_edit_player_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_mode_edit"
+                android:layout_gravity="center"
+                android:padding="@dimen/margin_default_half"
+                />
+
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="120dp"

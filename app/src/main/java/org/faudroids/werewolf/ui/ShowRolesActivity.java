@@ -4,12 +4,17 @@ package org.faudroids.werewolf.ui;
 import android.graphics.Path;
 import android.os.Bundle;
 import android.support.annotation.AnimRes;
+import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,6 +38,7 @@ public class ShowRolesActivity extends AbstractActivity {
 
 	@InjectView(R.id.layout_instructions) private View instructionsLayout;
 	@InjectView(R.id.txt_player_name) private TextView playerNameText;
+	@InjectView(R.id.btn_edit_player_name) private View editPlayerNameBtn;
 	@InjectView(R.id.btn_reveal) private View revealButton;
 
 	@InjectView(R.id.layout_role) private View roleLayout;
@@ -47,6 +53,9 @@ public class ShowRolesActivity extends AbstractActivity {
 	@Inject private GameManager gameManager;
 	private List<Player> players;
 	private int currentPlayerIdx;
+
+	@Inject private InputMethodManager inputMethodManager;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +144,20 @@ public class ShowRolesActivity extends AbstractActivity {
 				setCurrentPlayerIdx(currentPlayerIdx - 1, true);
 			}
 		});
+
+		// setup edit player name
+		playerNameText.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onEditPlayerName();
+			}
+		});
+		editPlayerNameBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onEditPlayerName();
+			}
+		});
 	}
 
 
@@ -157,6 +180,72 @@ public class ShowRolesActivity extends AbstractActivity {
 				playerNameText.setText(player.getName());
 			}
 		}, delay);
+	}
+
+
+	private void onEditPlayerName() {
+		final Player player = players.get(currentPlayerIdx);
+		View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_name, null);
+		final EditText editText = (EditText) dialogView.findViewById(R.id.name_edit);
+		editText.setText(player.getName());
+		final TextView errorView = (TextView) dialogView.findViewById(R.id.error_txt);
+		final View okBtn = dialogView.findViewById(R.id.btn_ok);
+		final View cancelBtn = dialogView.findViewById(R.id.btn_cancel);
+
+		editText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				boolean isError = false;
+				String newPlayerName = editText.getText().toString();
+				if (newPlayerName.isEmpty()) {
+					errorView.setText(R.string.error_empty_name);
+					isError = true;
+				}
+				for (int i = 0; i < players.size(); ++i) {
+					if (i == currentPlayerIdx) continue;
+					if (players.get(i).getName().equals(newPlayerName)) {
+						errorView.setText(R.string.error_duplicate_name);
+						isError = true;
+						break;
+					}
+				}
+				errorView.setVisibility(isError ? View.VISIBLE : View.GONE);
+				okBtn.setEnabled(!isError);
+			}
+		});
+
+		final AlertDialog dialog = new AlertDialog.Builder(this)
+				.setTitle(R.string.change_player_name)
+				.setView(dialogView)
+				.show();
+		editText.requestFocus();
+		inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+		okBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				player.setName(editText.getText().toString());
+				playerNameText.setText(player.getName());
+				gameManager.savePlayers(players);
+				inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+				dialog.dismiss();
+			}
+		});
+		cancelBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+				dialog.dismiss();
+			}
+		});
 	}
 
 
