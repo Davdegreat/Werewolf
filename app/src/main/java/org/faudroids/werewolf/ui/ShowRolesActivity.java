@@ -135,15 +135,10 @@ public class ShowRolesActivity extends AbstractActivity {
 				instructionsLayout.postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						revealButton.setEnabled(true);
-
-						// toggle layouts
-						instructionsLayout.startAnimation(loadAnimation(R.anim.fade_in));
-						navLayout.startAnimation(loadAnimation(R.anim.fade_in));
-						roleLayout.startAnimation(loadAnimation(R.anim.fade_out));
-
-						// enable showing next player role
-						nextButton.setEnabled(true);
+						// check if role needs to be hidden
+						if (isRoleVisible()) {
+							hideRole();
+						}
 					}
 				}, 3000);
 
@@ -211,6 +206,24 @@ public class ShowRolesActivity extends AbstractActivity {
 				playerNameText.setText(player.getName());
 			}
 		}, delay);
+	}
+
+
+	private void hideRole() {
+		revealButton.setEnabled(true);
+
+		// toggle layouts
+		instructionsLayout.startAnimation(loadAnimation(R.anim.fade_in));
+		navLayout.startAnimation(loadAnimation(R.anim.fade_in));
+		roleLayout.startAnimation(loadAnimation(R.anim.fade_out));
+
+		// enable showing next player role
+		nextButton.setEnabled(true);
+	}
+
+
+	private boolean isRoleVisible() {
+		return !revealButton.isEnabled();
 	}
 
 
@@ -288,7 +301,13 @@ public class ShowRolesActivity extends AbstractActivity {
 			return;
 		}
 
-		// if multiple players try going back one role
+		// check if role should be hidden
+		if (isRoleVisible()) {
+			hideRole();
+			return;
+		}
+
+		// try going back one role
 		if (backButton.getVisibility() == View.VISIBLE && backButton.isEnabled()) {
 			goToPreviousRole();
 		} else {
