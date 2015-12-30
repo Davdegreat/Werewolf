@@ -76,10 +76,10 @@ public class ShowRolesActivity extends AbstractActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// get current player
 		singlePlayer = (Player) getIntent().getSerializableExtra(EXTRA_PLAYER);
 		if (singlePlayer != null) {
 			nextButton.setVisibility(View.GONE);
-			backButton.setVisibility(View.GONE);
 			backButton.setVisibility(View.GONE);
 			playerNameText.setText(singlePlayer.getName());
 
@@ -101,8 +101,9 @@ public class ShowRolesActivity extends AbstractActivity {
 			setCurrentPlayerIdx(idx, false);
 		}
 
-		// start pulse animation on reveal button
-		revealButton.startAnimation(loadAnimation(R.anim.pulse));
+		// hide nav buttons by default
+		setVisibilityBySliding(backButton, false, 0);
+		setVisibilityBySliding(nextButton, false, 0);
 
 		// setup click to reveal
 		revealButton.setOnClickListener(new View.OnClickListener() {
@@ -202,10 +203,10 @@ public class ShowRolesActivity extends AbstractActivity {
 		final Player player = allPlayers.get(currentPlayerIdx);
 
 		// toggle nav buttons
-		nextButton.setVisibility(player.isSeen() ? View.VISIBLE : View.GONE);
+		setVisibilityBySliding(nextButton, player.isSeen());
 		if (currentPlayerIdx + 1 == allPlayers.size()) nextButton.setImageResource(R.drawable.ic_done);
 		else nextButton.setImageResource(R.drawable.ic_arrow_forward);
-		backButton.setVisibility(currentPlayerIdx != 0 ? View.VISIBLE : View.GONE);
+		setVisibilityBySliding(backButton, currentPlayerIdx != 0);
 
 		int delay = delayChangeRoleView ? getResources().getInteger(R.integer.anim_swipe_role_duration) : 0;
 		playerNameText.postDelayed(new Runnable() {
@@ -234,7 +235,7 @@ public class ShowRolesActivity extends AbstractActivity {
 		roleLayout.startAnimation(loadAnimation(R.anim.fade_out));
 
 		// enable showing next player role
-		nextButton.setVisibility(View.VISIBLE);
+		setVisibilityBySliding(nextButton, true);
 
 		// toggle pulse next action
 		highlightNextAction();
@@ -324,6 +325,17 @@ public class ShowRolesActivity extends AbstractActivity {
 	}
 
 
+	private void setVisibilityBySliding(View targetView, boolean visible) {
+		setVisibilityBySliding(targetView, visible, 300);
+	}
+
+
+	private void setVisibilityBySliding(View targetView, boolean visible, long duration) {
+		if (visible) targetView.animate().translationY(0).setDuration(duration);
+		else targetView.animate().translationYBy(getResources().getDimension(R.dimen.nav_button_slide_distance)).setDuration(duration);
+	}
+
+
 	@Override
 	public void onBackPressed() {
 		// if only one player then exit
@@ -339,7 +351,7 @@ public class ShowRolesActivity extends AbstractActivity {
 		}
 
 		// try going back one role
-		if (backButton.getVisibility() == View.VISIBLE && backButton.isEnabled()) {
+		if (currentPlayerIdx > 0) {
 			goToPreviousRole();
 		} else {
 			super.onBackPressed();

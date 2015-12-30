@@ -8,6 +8,7 @@
 
     <dimen name="role_icon_size">250dp</dimen>
     <dimen name="nav_button_size">52dp</dimen>
+    <dimen name="nav_button_slide_distance">100dp</dimen>
 
     <dimen name="picker_button_size">36dp</dimen>
 </resources>
