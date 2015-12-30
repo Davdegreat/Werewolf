@@ -15,6 +15,7 @@ import org.faudroids.werewolf.core.Role;
 import org.roboguice.shaded.goole.common.collect.Lists;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -188,42 +189,34 @@ public class GameSetupActivity extends AbstractActivity {
 
 	private void startGame() {
 		List<Player> players = new ArrayList<>(mPlayerCountPicker.getValue());
-
-		int playerId = 1;
-
-		for (int i = 0; i < mWerewolfCountPicker.getValue(); i++) {
-			players.add(new Player(playerId++, false, Role.WEREWOLF, null));
-		}
-		for (int i = 0; i < mVillagerCountPicker.getValue(); i++) {
-			players.add(new Player(playerId++, false, Role.VILLAGER, null));
-		}
-		for (int i = 0; i < mSeerCountPicker.getValue(); i++) {
-			players.add(new Player(playerId++, false, Role.SEER, null));
-		}
-		for (int i = 0; i < mDoctorCountPicker.getValue(); i++) {
-			players.add(new Player(playerId++, false, Role.DOCTOR, null));
-		}
-		for (int i = 0; i < mHunterCountPicker.getValue(); i++) {
-			players.add(new Player(playerId++, false, Role.HUNTER, null));
-		}
-		for (int i = 0; i < mWitchCountPicker.getValue(); i++) {
-			players.add(new Player(playerId++, false, Role.WITCH, null));
-		}
-		for (int i = 0; i < mPriestCountPicker.getValue(); i++) {
-			players.add(new Player(playerId++, false, Role.PRIEST, null));
-		}
-		for (int i = 0; i < mAmorCountPicker.getValue(); i++) {
-			players.add(new Player(playerId++, false, Role.AMOR, null));
+		createPlayers(players, mWerewolfCountPicker, Role.WEREWOLF);
+		createPlayers(players, mVillagerCountPicker, Role.VILLAGER);
+		createPlayers(players, mSeerCountPicker, Role.SEER);
+		createPlayers(players, mDoctorCountPicker, Role.DOCTOR);
+		createPlayers(players, mHunterCountPicker, Role.HUNTER);
+		createPlayers(players, mWitchCountPicker, Role.WITCH);
+		createPlayers(players, mPriestCountPicker, Role.PRIEST);
+		createPlayers(players, mAmorCountPicker, Role.AMOR);
+		Collections.shuffle(players);
+		for (int i = 0; i < players.size(); ++i) {
+			Player player = players.get(i);
+			player.setId(i);
+			player.setName(getString(R.string.default_player_name, i + 1));
 		}
 
 		if (mGameManager.savePlayers(players)) {
-			Intent intent = new Intent(GameSetupActivity.this, ShowRolesActivity.class);
-			GameSetupActivity.this.finish();
-			GameSetupActivity.this.startActivity(intent);
+			startActivity(new Intent(GameSetupActivity.this, ShowRolesActivity.class));
+			finish();
 		} else {
 			Toast.makeText(this, "Something went wrong...", Toast.LENGTH_LONG).show();
 		}
 
+	}
 
+	private int createPlayers(List<Player> players, NumberPickerView pickerView, Role role) {
+		for (int i = 0; i < pickerView.getValue(); i++) {
+			players.add(new Player(0, false, role, null));
+		}
+		return pickerView.getValue();
 	}
 }
