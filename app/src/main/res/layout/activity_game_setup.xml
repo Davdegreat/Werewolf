@@ -1,223 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:padding="@dimen/margin_default"
+    android:scrollbars="none"
     >
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:layout_margin="@dimen/margin_default"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="To be assigned:"
-            />
-
-        <TextView
-            android:id="@+id/cnf_tobeassigned_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="20"
-            />
-
-    </LinearLayout>
-
-    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/margin_default"
-        android:scrollbars="none"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <TextView
-                    android:text="@string/cnf_player_count_label"
-                    style="@style/SetupRoleCountText"
-                    />
-
-                <org.faudroids.werewolf.ui.NumberPickerView
-                    android:id="@+id/cnf_player_count_picker"
-                    style="@style/SetupRoleCountPicker"
-                    />
-
-            </LinearLayout>
-
-
-            <Button
-                android:id="@+id/cnf_autoassign_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/cnf_autoassign_btn_label"
+            <TextView
+                style="@style/SetupRoleCountText"
+                android:text="@string/cnf_player_count_label"
                 />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <TextView
-                    android:text="@string/cnf_werewolf_count_label"
-                    style="@style/SetupRoleCountText"
-                    />
-
-                <org.faudroids.werewolf.ui.NumberPickerView
-                    android:id="@+id/cnf_werewolf_count_picker"
-                    style="@style/SetupRoleCountPicker"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <TextView
-                    android:text="@string/cnf_villager_count_label"
-                    style="@style/SetupRoleCountText"
-                    />
-
-                <org.faudroids.werewolf.ui.NumberPickerView
-                    android:id="@+id/cnf_villager_count_picker"
-                    style="@style/SetupRoleCountPicker"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <TextView
-                    android:text="@string/cnf_seer_count_label"
-                    style="@style/SetupRoleCountText"
-                    />
-
-                <org.faudroids.werewolf.ui.NumberPickerView
-                    android:id="@+id/cnf_seer_count_picker"
-                    style="@style/SetupRoleCountPicker"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <TextView
-                    style="@style/SetupRoleCountText"
-                    android:text="@string/cnf_doctor_count_label"
-                    />
-
-                <org.faudroids.werewolf.ui.NumberPickerView
-                    android:id="@+id/cnf_doctor_count_picker"
-                    style="@style/SetupRoleCountPicker"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <TextView
-                    style="@style/SetupRoleCountText"
-                    android:text="@string/cnf_hunter_count_label"
-                    />
-
-                <org.faudroids.werewolf.ui.NumberPickerView
-                    android:id="@+id/cnf_hunter_count_picker"
-                    style="@style/SetupRoleCountPicker"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <TextView
-                    android:text="@string/cnf_witch_count_label"
-                    style="@style/SetupRoleCountText"
-                    />
-
-                <org.faudroids.werewolf.ui.NumberPickerView
-                    android:id="@+id/cnf_witch_count_picker"
-                    style="@style/SetupRoleCountPicker"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <TextView
-                    android:text="@string/cnf_priest_count_label"
-                    style="@style/SetupRoleCountText"
-                    />
-
-                <org.faudroids.werewolf.ui.NumberPickerView
-                    android:id="@+id/cnf_priest_count_picker"
-                    style="@style/SetupRoleCountPicker"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <TextView
-                    android:text="@string/cnf_amor_count_label"
-                    style="@style/SetupRoleCountText"
-                    />
-
-                <org.faudroids.werewolf.ui.NumberPickerView
-                    android:id="@+id/cnf_amor_count_picker"
-                    style="@style/SetupRoleCountPicker"
-                    />
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/cnf_start_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/cnf_start_btn_label"
+            <org.faudroids.werewolf.ui.NumberPickerView
+                android:id="@+id/cnf_player_count_picker"
+                style="@style/SetupRoleCountPicker"
                 />
 
         </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+
+
+        <CheckBox
+            android:id="@+id/cnf_auto_assign_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cnf_auto_assign_label"
+            android:checked="true"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider"
+            android:layout_margin="@dimen/margin_default"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/SetupRoleCountText"
+                android:text="@string/cnf_werewolf_count_label"
+                />
+
+            <org.faudroids.werewolf.ui.NumberPickerView
+                android:id="@+id/cnf_werewolf_count_picker"
+                style="@style/SetupRoleCountPicker"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/SetupRoleCountText"
+                android:text="@string/cnf_villager_count_label"
+                />
+
+            <org.faudroids.werewolf.ui.NumberPickerView
+                android:id="@+id/cnf_villager_count_picker"
+                style="@style/SetupRoleCountPicker"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/SetupRoleCountText"
+                android:text="@string/cnf_seer_count_label"
+                />
+
+            <org.faudroids.werewolf.ui.NumberPickerView
+                android:id="@+id/cnf_seer_count_picker"
+                style="@style/SetupRoleCountPicker"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/SetupRoleCountText"
+                android:text="@string/cnf_doctor_count_label"
+                />
+
+            <org.faudroids.werewolf.ui.NumberPickerView
+                android:id="@+id/cnf_doctor_count_picker"
+                style="@style/SetupRoleCountPicker"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/SetupRoleCountText"
+                android:text="@string/cnf_hunter_count_label"
+                />
+
+            <org.faudroids.werewolf.ui.NumberPickerView
+                android:id="@+id/cnf_hunter_count_picker"
+                style="@style/SetupRoleCountPicker"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/SetupRoleCountText"
+                android:text="@string/cnf_witch_count_label"
+                />
+
+            <org.faudroids.werewolf.ui.NumberPickerView
+                android:id="@+id/cnf_witch_count_picker"
+                style="@style/SetupRoleCountPicker"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/SetupRoleCountText"
+                android:text="@string/cnf_priest_count_label"
+                />
+
+            <org.faudroids.werewolf.ui.NumberPickerView
+                android:id="@+id/cnf_priest_count_picker"
+                style="@style/SetupRoleCountPicker"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/SetupRoleCountText"
+                android:text="@string/cnf_amor_count_label"
+                />
+
+            <org.faudroids.werewolf.ui.NumberPickerView
+                android:id="@+id/cnf_amor_count_picker"
+                style="@style/SetupRoleCountPicker"
+                />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/cnf_start_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cnf_start_btn_label"
+            android:background="@drawable/selector_accent"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="@dimen/margin_default"
+            />
+
+    </LinearLayout>
+
+</ScrollView>

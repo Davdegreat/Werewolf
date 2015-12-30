@@ -18,8 +18,8 @@
     <string name="role_amor_name">Amor</string>
     <string name="role_amor_goal">Choose a love couple</string>
     <string name="touch_to_reveal_role">Touch to reveal role</string>
-    <string name="cnf_player_count_label">Number of Players:</string>
-    <string name="cnf_werewolf_count_label">Werewolfes:</string>
+    <string name="cnf_player_count_label">Number of Players</string>
+    <string name="cnf_werewolf_count_label">Werewolves</string>
     <string name="cnf_villager_count_label">Villagers</string>
     <string name="cnf_seer_count_label">Seers</string>
     <string name="cnf_doctor_count_label">Doctors</string>
@@ -27,8 +27,9 @@
     <string name="cnf_witch_count_label">Witches</string>
     <string name="cnf_priest_count_label">Priests</string>
     <string name="cnf_amor_count_label">Amors</string>
-    <string name="cnf_autoassign_btn_label">Auto Assign</string>
+    <string name="cnf_auto_assign_label">Auto assign roles</string>
     <string name="cnf_start_btn_label">Start Game</string>
+    <string name="cnf_x_players_unassigned">%1$d players unassigned</string>
 
     <string name="change_player_name">Change player name</string>
     <string name="default_player_name">Player %1$d</string>

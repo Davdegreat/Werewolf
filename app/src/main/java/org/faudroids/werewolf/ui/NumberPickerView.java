@@ -7,7 +7,6 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,8 +18,10 @@ public class NumberPickerView extends LinearLayout {
 	private int minValue, maxValue;
 	private OnValueChangeListener listener;
 
-	private Button increaseButton, decreaseButton;
+	private View increaseButton, decreaseButton;
 	private TextView numberText;
+
+	private boolean isEnabled; // enable / disable buttons
 
 	public NumberPickerView(Context context) {
 		super(context);
@@ -45,8 +46,8 @@ public class NumberPickerView extends LinearLayout {
 
 	private void setupLayout() {
 		View rootView = LayoutInflater.from(getContext()).inflate(R.layout.view_number_picker, this);
-		increaseButton = (Button) rootView.findViewById(R.id.btn_increase);
-		decreaseButton = (Button) rootView.findViewById(R.id.btn_decrease);
+		increaseButton = rootView.findViewById(R.id.btn_increase);
+		decreaseButton = rootView.findViewById(R.id.btn_decrease);
 		numberText = (TextView) rootView.findViewById(R.id.txt_number);
 
 		increaseButton.setOnClickListener(new OnClickListener() {
@@ -65,6 +66,18 @@ public class NumberPickerView extends LinearLayout {
 		minValue = 0;
 		maxValue = 0;
 		setValue(0);
+		isEnabled = true;
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) {
+		this.isEnabled = enabled;
+		updateButtons();
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return isEnabled;
 	}
 
 	public void setValue(int value) {
@@ -76,8 +89,7 @@ public class NumberPickerView extends LinearLayout {
 		final int newValue = value;
 		this.value = newValue;
 		numberText.setText(String.valueOf(newValue));
-		increaseButton.setEnabled(newValue != maxValue);
-		decreaseButton.setEnabled(newValue != minValue);
+		updateButtons();
 
 		if (listener == null) return;
 		post(new Runnable() {
@@ -86,6 +98,11 @@ public class NumberPickerView extends LinearLayout {
 				listener.onValueChange(NumberPickerView.this, oldValue, newValue);
 			}
 		});
+	}
+
+	private void updateButtons() {
+		increaseButton.setEnabled(isEnabled && value != maxValue);
+		decreaseButton.setEnabled(isEnabled && value != minValue);
 	}
 
 	public int getValue() {
@@ -98,6 +115,7 @@ public class NumberPickerView extends LinearLayout {
 
 	public void setMinValue(int minValue) {
 		this.minValue = minValue;
+		updateButtons();
 	}
 
 	public int getMaxValue() {
@@ -106,6 +124,7 @@ public class NumberPickerView extends LinearLayout {
 
 	public void setMaxValue(int maxValue) {
 		this.maxValue = maxValue;
+		updateButtons();
 	}
 
 	public void setOnValueChangeListener(OnValueChangeListener listener) {

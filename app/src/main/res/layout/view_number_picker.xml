@@ -5,28 +5,32 @@
     android:orientation="horizontal"
     >
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_decrease"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="-"
+        android:layout_width="@dimen/picker_button_size"
+        android:layout_height="@dimen/picker_button_size"
+        android:src="@drawable/ic_remove"
+        android:background="@drawable/selector_picker_button"
         />
 
     <TextView
         android:id="@+id/txt_number"
-        android:layout_width="wrap_content"
+        android:layout_width="32dp"
         android:layout_height="wrap_content"
-        android:text="10"
+        android:gravity="center"
+        android:text="0"
         android:textColor="@android:color/black"
         android:layout_marginLeft="@dimen/margin_default_half"
         android:layout_marginRight="@dimen/margin_default_half"
+        android:layout_gravity="center"
         />
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_increase"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
+        android:layout_width="@dimen/picker_button_size"
+        android:layout_height="@dimen/picker_button_size"
+        android:background="@drawable/selector_picker_button"
+        android:src="@drawable/ic_add"
         />
 
 </LinearLayout>

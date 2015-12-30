@@ -25,6 +25,8 @@
         <item name="android:gravity">right</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_default_quarter</item>
+        <item name="android:layout_marginBottom">@dimen/margin_default_quarter</item>
     </style>
 
 </resources>

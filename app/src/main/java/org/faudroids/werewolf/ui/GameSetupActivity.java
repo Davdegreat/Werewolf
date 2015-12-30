@@ -1,18 +1,18 @@
 package org.faudroids.werewolf.ui;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import org.faudroids.werewolf.R;
 import org.faudroids.werewolf.core.GameManager;
 import org.faudroids.werewolf.core.Player;
 import org.faudroids.werewolf.core.Role;
+import org.roboguice.shaded.goole.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,213 +27,203 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.activity_game_setup)
 public class GameSetupActivity extends AbstractActivity {
 
-    @InjectView(R.id.cnf_autoassign_btn) private Button mAutoAssignButton;
-    @InjectView(R.id.cnf_tobeassigned_label) private TextView mToBeAssignedTextView;
+	private static final int DEFAULT_PLAYER_COUNT = 10;
 
-    @InjectView(R.id.cnf_player_count_picker) private NumberPickerView mPlayerCountPicker;
+	@InjectView(R.id.cnf_auto_assign_cb) private CheckBox mAutoAssignCb;
 
-    @InjectView(R.id.cnf_werewolf_count_picker) private NumberPickerView mWerewolfCountPicker;
-    @InjectView(R.id.cnf_villager_count_picker) private NumberPickerView mVillagerCountPicker;
-    @InjectView(R.id.cnf_seer_count_picker) private NumberPickerView mSeerCountPicker;
-    @InjectView(R.id.cnf_doctor_count_picker) private NumberPickerView mDoctorCountPicker;
-    @InjectView(R.id.cnf_hunter_count_picker) private NumberPickerView mHunterCountPicker;
-    @InjectView(R.id.cnf_witch_count_picker) private NumberPickerView mWitchCountPicker;
-    @InjectView(R.id.cnf_priest_count_picker) private NumberPickerView mPriestCountPicker;
-    @InjectView(R.id.cnf_amor_count_picker) private NumberPickerView mAmorCountPicker;
+	@InjectView(R.id.cnf_player_count_picker) private NumberPickerView mPlayerCountPicker;
 
-    @InjectView(R.id.cnf_start_btn) private Button mStartButton;
+	@InjectView(R.id.cnf_werewolf_count_picker) private NumberPickerView mWerewolfCountPicker;
+	@InjectView(R.id.cnf_villager_count_picker) private NumberPickerView mVillagerCountPicker;
+	@InjectView(R.id.cnf_seer_count_picker) private NumberPickerView mSeerCountPicker;
+	@InjectView(R.id.cnf_doctor_count_picker) private NumberPickerView mDoctorCountPicker;
+	@InjectView(R.id.cnf_hunter_count_picker) private NumberPickerView mHunterCountPicker;
+	@InjectView(R.id.cnf_witch_count_picker) private NumberPickerView mWitchCountPicker;
+	@InjectView(R.id.cnf_priest_count_picker) private NumberPickerView mPriestCountPicker;
+	@InjectView(R.id.cnf_amor_count_picker) private NumberPickerView mAmorCountPicker;
 
-    @Inject
-    private GameManager mGameManager;
+	@InjectView(R.id.cnf_start_btn) private Button mStartButton;
 
-    private final int DEFAULT_PLAYER_COUNT = 10;
+	@Inject private GameManager mGameManager;
 
-    private List<NumberPickerView> allPickers;
-    private List<NumberPickerView> specialRolePickers;
-    private int mToBeAssignedCount = DEFAULT_PLAYER_COUNT;
+	private List<NumberPickerView> allPickers;
+	private List<NumberPickerView> specialRolePickers;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        allPickers = new ArrayList<>();
-        allPickers.add(mWerewolfCountPicker);
-        allPickers.add(mVillagerCountPicker);
-        allPickers.add(mSeerCountPicker);
-        allPickers.add(mDoctorCountPicker);
-        allPickers.add(mHunterCountPicker);
-        allPickers.add(mWitchCountPicker);
-        allPickers.add(mPriestCountPicker);
-        allPickers.add(mAmorCountPicker);
+		allPickers = Lists.newArrayList(
+				mWerewolfCountPicker,
+				mVillagerCountPicker,
+				mSeerCountPicker,
+				mDoctorCountPicker,
+				mHunterCountPicker,
+				mWitchCountPicker,
+				mPriestCountPicker,
+				mAmorCountPicker
+		);
 
-        specialRolePickers = new ArrayList<>();
-        specialRolePickers.add(mSeerCountPicker);
-        specialRolePickers.add(mDoctorCountPicker);
-        specialRolePickers.add(mHunterCountPicker);
-        specialRolePickers.add(mWitchCountPicker);
-        specialRolePickers.add(mPriestCountPicker);
-        specialRolePickers.add(mAmorCountPicker);
+		specialRolePickers = Lists.newArrayList(
+				mSeerCountPicker,
+				mDoctorCountPicker,
+				mHunterCountPicker,
+				mWitchCountPicker,
+				mPriestCountPicker,
+				mAmorCountPicker
+		);
 
+		for (NumberPickerView np : allPickers) {
+			np.setMinValue(0);
+			np.setEnabled(false);
+		}
 
-        for(NumberPickerView np : allPickers){
-            np.setMinValue(0);
-        }
-
-        mAutoAssignButton.setOnClickListener(new View.OnClickListener() {
+		// setup auto assign
+		mAutoAssignCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
-			public void onClick(View v) {
-				int playerCount = mPlayerCountPicker.getValue();
-				int villagersCount = playerCount / 2 + playerCount % 2;
-				int werewolfCount = playerCount / 2;
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				for (NumberPickerView pickerView : allPickers) {
+					pickerView.setEnabled(!isChecked);
+				}
+				if (isChecked) autoAssignRoles();
+			}
+		});
 
-				for (NumberPickerView np : specialRolePickers) {
-					np.setMinValue(0);
-					if (villagersCount > 2) {
-						villagersCount--;
-						np.setMaxValue(1);
-						np.setValue(1);
-					} else {
-						np.setMaxValue(0);
-						np.setValue(0);
+		// setup auto update picker values on picker value change
+		NumberPickerView.OnValueChangeListener listener = new NumberPickerView.OnValueChangeListener() {
+			@Override
+			public void onValueChange(NumberPickerView picker, int oldValue, int newValue) {
+				int playerCount = getPlayerCount();
+				int assignedPlayers = getAssignedPlayerCount();
+
+				// too many assigned roles, iterate through assigned Roles trying to decrement special roles first
+				if (playerCount < assignedPlayers && !mAutoAssignCb.isChecked()) {
+					int playerSurplus = assignedPlayers - playerCount;
+					ListIterator<NumberPickerView> it = allPickers.listIterator(allPickers.size());
+					while (it.hasPrevious()) {
+						NumberPickerView currentPicker = it.previous();
+						int value = currentPicker.getValue();
+						if (value == 0) continue;
+						currentPicker.setValue(Math.max(0, value - playerSurplus));
+						playerSurplus -= value - currentPicker.getValue();
+						if (playerSurplus == 0) break;
 					}
 				}
 
-				mWerewolfCountPicker.setMinValue(0);
-				mWerewolfCountPicker.setMaxValue(werewolfCount);
-				mWerewolfCountPicker.setValue(werewolfCount);
+				// update picker + start game button
+				updatePickersMax();
+				int unassignedPlayers = getUnassignedPlayerCount();
+				if (unassignedPlayers > 0 && !mAutoAssignCb.isChecked()) {
+					mStartButton.setEnabled(false);
+					mStartButton.setText(getString(R.string.cnf_x_players_unassigned, unassignedPlayers));
+				} else {
+					mStartButton.setEnabled(true);
+					mStartButton.setText(R.string.cnf_start_btn_label);
+				}
 
-				mVillagerCountPicker.setMinValue(0);
-				mVillagerCountPicker.setMaxValue(villagersCount);
-				mVillagerCountPicker.setValue(villagersCount);
-
-
-				mToBeAssignedCount = 0;
-				mToBeAssignedTextView.setText("" + mToBeAssignedCount);
+				// check for auto assign mode
+				if (mAutoAssignCb.isChecked()) autoAssignRoles();
 			}
+		};
 
+		mPlayerCountPicker.setOnValueChangeListener(listener);
+		for (NumberPickerView np : allPickers) {
+			np.setOnValueChangeListener(listener);
+		}
 
+		// default player count
+		mPlayerCountPicker.setMinValue(3);
+		mPlayerCountPicker.setMaxValue(100);
+		mPlayerCountPicker.setValue(DEFAULT_PLAYER_COUNT);
+
+		// click to start game
+		mStartButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startGame();
+			}
 		});
+	}
 
-        // default player count
-        mToBeAssignedTextView.setText("" + DEFAULT_PLAYER_COUNT);
-        mPlayerCountPicker.setMinValue(3);
-        mPlayerCountPicker.setMaxValue(100);
-        mPlayerCountPicker.setValue(DEFAULT_PLAYER_COUNT);
+	private void updatePickersMax() {
+		int unassignedPlayers = getUnassignedPlayerCount();
+		for (NumberPickerView pickerView : allPickers) {
+			pickerView.setMaxValue(pickerView.getValue() + unassignedPlayers);
+		}
+	}
 
-        NumberPickerView.OnValueChangeListener listener = new NumberPickerView.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPickerView picker, int oldVal, int newVal) {
-                int playerCount = mPlayerCountPicker.getValue();
+	private int getPlayerCount() {
+		return mPlayerCountPicker.getValue();
+	}
 
-                int assignedPlayerCount = 0;
-                for(NumberPickerView np : allPickers){
-                    assignedPlayerCount += np.getValue();
-                }
+	private int getAssignedPlayerCount() {
+		int playerCount = 0;
+		for (NumberPickerView pickerView : allPickers) {
+			playerCount += pickerView.getValue();
+		}
+		return playerCount;
+	}
 
-                mToBeAssignedCount = playerCount - assignedPlayerCount;
-                if(mToBeAssignedCount >= 0) {
-                    for (NumberPickerView np : allPickers) {
-                        np.setMinValue(0);
-                        np.setMaxValue(np.getValue() + mToBeAssignedCount);
-                    }
-                } else {
-                   // too many assigned roles => players.size() < assignedRoles.size()
-                   // iterate through assigned Roles trying to decrement special roles first
-                  ListIterator<NumberPickerView> it = allPickers.listIterator(allPickers.size());
-                   while(it.hasPrevious()){
-                       NumberPickerView currPicker = it.previous();
-                       int currVal = currPicker.getValue();
-                       if(currVal > 0){
+	private int getUnassignedPlayerCount() {
+		return getPlayerCount() - getAssignedPlayerCount();
+	}
 
-                           if(mToBeAssignedCount + currVal < 0){
-                               mToBeAssignedCount += currVal;
-                               currVal = 0;
-                           } else {
-                               currVal += mToBeAssignedCount;
-                               mToBeAssignedCount = 0;
-                           }
+	private void autoAssignRoles() {
+		int playerCount = getPlayerCount();
+		int werewolfCount = playerCount / 2;
+		int villagersCount = playerCount - werewolfCount;
 
-                           currPicker.setMinValue(0);
-                           currPicker.setMaxValue(currVal);
-                           currPicker.setValue(currVal);
-                       }
+		for (NumberPickerView np : specialRolePickers) {
+			if (villagersCount > 2) {
+				villagersCount--;
+				np.setValue(1);
+			} else {
+				np.setValue(0);
+			}
+		}
 
-                       if(mToBeAssignedCount >= 0){ break; }
-                   }
-                }
+		mWerewolfCountPicker.setValue(werewolfCount);
+		mVillagerCountPicker.setValue(villagersCount);
+	}
 
-                mToBeAssignedTextView.setText("" + mToBeAssignedCount);
+	private void startGame() {
+		List<Player> players = new ArrayList<>(mPlayerCountPicker.getValue());
 
-            }
-        };
+		int playerId = 1;
 
-        mPlayerCountPicker.setOnValueChangeListener(listener);
+		for (int i = 0; i < mWerewolfCountPicker.getValue(); i++) {
+			players.add(new Player(playerId++, false, Role.WEREWOLF, null));
+		}
+		for (int i = 0; i < mVillagerCountPicker.getValue(); i++) {
+			players.add(new Player(playerId++, false, Role.VILLAGER, null));
+		}
+		for (int i = 0; i < mSeerCountPicker.getValue(); i++) {
+			players.add(new Player(playerId++, false, Role.SEER, null));
+		}
+		for (int i = 0; i < mDoctorCountPicker.getValue(); i++) {
+			players.add(new Player(playerId++, false, Role.DOCTOR, null));
+		}
+		for (int i = 0; i < mHunterCountPicker.getValue(); i++) {
+			players.add(new Player(playerId++, false, Role.HUNTER, null));
+		}
+		for (int i = 0; i < mWitchCountPicker.getValue(); i++) {
+			players.add(new Player(playerId++, false, Role.WITCH, null));
+		}
+		for (int i = 0; i < mPriestCountPicker.getValue(); i++) {
+			players.add(new Player(playerId++, false, Role.PRIEST, null));
+		}
+		for (int i = 0; i < mAmorCountPicker.getValue(); i++) {
+			players.add(new Player(playerId++, false, Role.AMOR, null));
+		}
 
-        for(NumberPickerView np : allPickers){
-            np.setOnValueChangeListener(listener);
-        }
-
-        mStartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mToBeAssignedCount > 0) {
-                    new AlertDialog.Builder(GameSetupActivity.this)
-                            .setMessage("There are " + mToBeAssignedCount + " players left to be assiged. Proceed anyway?")
-                            .setCancelable(false)
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    startGame();
-                                }
-                            })
-                            .setNegativeButton("No", null)
-                            .show();
-                } else {
-                    startGame();
-                }
-
-            }
-        });
-
-    }
-
-    private void startGame() {
-        List<Player> players = new ArrayList<>(mPlayerCountPicker.getValue());
-
-        int playerId = 1;
-
-        for(int i = 0; i < mWerewolfCountPicker.getValue(); i++){
-            players.add(new Player(playerId++, false, Role.WEREWOLF, null));
-        }
-        for(int i = 0; i < mVillagerCountPicker.getValue(); i++){
-            players.add(new Player(playerId++, false, Role.VILLAGER, null));
-        }
-        for(int i = 0; i < mSeerCountPicker.getValue(); i++){
-            players.add(new Player(playerId++, false, Role.SEER, null));
-        }
-        for(int i = 0; i < mDoctorCountPicker.getValue(); i++){
-            players.add(new Player(playerId++, false, Role.DOCTOR, null));
-        }
-        for(int i = 0; i < mHunterCountPicker.getValue(); i++){
-            players.add(new Player(playerId++, false, Role.HUNTER, null));
-        }
-        for(int i = 0; i < mWitchCountPicker.getValue(); i++){
-            players.add(new Player(playerId++, false, Role.WITCH, null));
-        }
-        for(int i = 0; i < mPriestCountPicker.getValue(); i++){
-            players.add(new Player(playerId++, false, Role.PRIEST, null));
-        }
-        for(int i = 0; i < mAmorCountPicker.getValue(); i++){
-            players.add(new Player(playerId++, false, Role.AMOR, null));
-        }
-
-        if(mGameManager.savePlayers(players)){
-            Intent intent = new Intent(GameSetupActivity.this, ShowRolesActivity.class);
-            GameSetupActivity.this.finish();
-            GameSetupActivity.this.startActivity(intent);
-        } else {
-            Toast.makeText(this, "Something went wrong...", Toast.LENGTH_LONG).show();
-        }
+		if (mGameManager.savePlayers(players)) {
+			Intent intent = new Intent(GameSetupActivity.this, ShowRolesActivity.class);
+			GameSetupActivity.this.finish();
+			GameSetupActivity.this.startActivity(intent);
+		} else {
+			Toast.makeText(this, "Something went wrong...", Toast.LENGTH_LONG).show();
+		}
 
 
-    }
+	}
 }
