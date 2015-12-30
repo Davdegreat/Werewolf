@@ -88,7 +88,7 @@
                 android:id="@+id/btn_reveal"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:background="@drawable/background_reveal_role"
+                android:background="@drawable/selector_accent_large"
                 android:layout_centerInParent="true"
                 />
 
