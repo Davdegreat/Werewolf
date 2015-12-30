@@ -309,7 +309,7 @@ public class ShowRolesActivity extends AbstractActivity {
 			public void onClick(View v) {
 				player.setName(editText.getText().toString());
 				playerNameText.setText(player.getName());
-				gameManager.savePlayers(allPlayers);
+				gameManager.savePlayer(player);
 				inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 				dialog.dismiss();
 			}

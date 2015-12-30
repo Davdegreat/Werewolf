@@ -18,9 +18,11 @@ import java.util.List;
 import java.util.Random;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import timber.log.Timber;
 
+@Singleton
 public class GameManager {
 
     private final String PLAYERS_FILENAME = "Players";
@@ -49,6 +51,7 @@ public class GameManager {
 			playersCache = gson.fromJson(new FileReader(new File(context.getFilesDir(), PLAYERS_FILENAME)), playersType);
 			return playersCache;
         } catch (FileNotFoundException e) {
+			Timber.w(e, "failed to find players file");
             return null;
         }
     }
@@ -67,6 +70,14 @@ public class GameManager {
 			return false;
 		}
 		return true;
+	}
+
+
+	public boolean savePlayer(Player player) {
+		loadPlayers();
+		playersCache.remove(player.getId());
+		playersCache.add(player.getId(), player);
+		return savePlayers(playersCache);
 	}
 
 
