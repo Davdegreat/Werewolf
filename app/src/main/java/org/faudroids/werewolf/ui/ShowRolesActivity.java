@@ -1,6 +1,7 @@
 package org.faudroids.werewolf.ui;
 
 
+import android.content.Intent;
 import android.graphics.Path;
 import android.os.Bundle;
 import android.support.annotation.AnimRes;
@@ -36,6 +37,9 @@ import timber.log.Timber;
 @ContentView(R.layout.activity_show_roles)
 public class ShowRolesActivity extends AbstractActivity {
 
+	// optional extra if only one player role should be shown
+	public static final String EXTRA_PLAYER = "EXTRA_PLAYER";
+
 	@InjectView(R.id.layout_instructions) private View instructionsLayout;
 	@InjectView(R.id.txt_player_name) private TextView playerNameText;
 	@InjectView(R.id.btn_edit_player_name) private View editPlayerNameBtn;
@@ -51,7 +55,12 @@ public class ShowRolesActivity extends AbstractActivity {
 	@InjectView(R.id.btn_next) private View nextButton;
 
 	@Inject private GameManager gameManager;
-	private List<Player> players;
+
+	// not null if viewing only one player
+	private Player singlePlayer = null;
+
+	// not null if viewing all players
+	private List<Player> allPlayers = null;
 	private int currentPlayerIdx;
 
 	@Inject private InputMethodManager inputMethodManager;
@@ -61,21 +70,30 @@ public class ShowRolesActivity extends AbstractActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// get current player
-		players = gameManager.loadPlayers();
-		int idx = -1;
-		for (int i = 0; i < players.size(); ++i) {
-			if (!players.get(i).isSeen()) {
-				idx = i;
-				break;
+		singlePlayer = (Player) getIntent().getSerializableExtra(EXTRA_PLAYER);
+		if (singlePlayer != null) {
+			nextButton.setVisibility(View.GONE);
+			backButton.setVisibility(View.GONE);
+			backButton.setVisibility(View.GONE);
+			playerNameText.setText(singlePlayer.getName());
+
+		} else {
+			// get current player
+			allPlayers = gameManager.loadPlayers();
+			int idx = -1;
+			for (int i = 0; i < allPlayers.size(); ++i) {
+				if (!allPlayers.get(i).isSeen()) {
+					idx = i;
+					break;
+				}
 			}
+			if (idx == -1) {
+				Timber.d("all players have seen their role");
+				finish();
+				return;
+			}
+			setCurrentPlayerIdx(idx, false);
 		}
-		if (idx == -1) {
-			Timber.d("all players have seen their role");
-			finish();
-			return;
-		}
-		setCurrentPlayerIdx(idx, false);
 
 		// start pulse animation on reveal button
 		revealButton.startAnimation(loadAnimation(R.anim.pulse));
@@ -87,9 +105,9 @@ public class ShowRolesActivity extends AbstractActivity {
 				revealButton.setEnabled(false);
 
 				// update player
-				Player player = players.get(currentPlayerIdx);
+				Player player = getCurrentPlayer();
 				player.setIsSeen(true);
-				gameManager.savePlayers(players);
+				gameManager.savePlayers(allPlayers);
 
 				// toggle layouts
 				instructionsLayout.startAnimation(loadAnimation(R.anim.fade_out));
@@ -163,13 +181,14 @@ public class ShowRolesActivity extends AbstractActivity {
 
 	private void setCurrentPlayerIdx(int currentPlayerIdx, boolean delaySetPlayerName) {
 		this.currentPlayerIdx = currentPlayerIdx;
-		if (currentPlayerIdx >= players.size()) {
+		if (currentPlayerIdx >= allPlayers.size()) {
 			Timber.d("done viewing all players");
+			startActivity(new Intent(this, PlayersOverviewActivity.class));
 			finish();
 			return;
 		}
 
-		final Player player = players.get(currentPlayerIdx);
+		final Player player = allPlayers.get(currentPlayerIdx);
 		nextButton.setEnabled(player.isSeen());
 		backButton.setVisibility(currentPlayerIdx != 0 ? View.VISIBLE : View.GONE);
 		int delay = delaySetPlayerName ? getResources().getInteger(R.integer.anim_swipe_role_duration) : 0;
@@ -184,7 +203,7 @@ public class ShowRolesActivity extends AbstractActivity {
 
 
 	private void onEditPlayerName() {
-		final Player player = players.get(currentPlayerIdx);
+		final Player player = getCurrentPlayer();
 		View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_name, null);
 		final EditText editText = (EditText) dialogView.findViewById(R.id.name_edit);
 		editText.setText(player.getName());
@@ -209,9 +228,9 @@ public class ShowRolesActivity extends AbstractActivity {
 					errorView.setText(R.string.error_empty_name);
 					isError = true;
 				}
-				for (int i = 0; i < players.size(); ++i) {
+				for (int i = 0; i < allPlayers.size(); ++i) {
 					if (i == currentPlayerIdx) continue;
-					if (players.get(i).getName().equals(newPlayerName)) {
+					if (allPlayers.get(i).getName().equals(newPlayerName)) {
 						errorView.setText(R.string.error_duplicate_name);
 						isError = true;
 						break;
@@ -234,7 +253,7 @@ public class ShowRolesActivity extends AbstractActivity {
 			public void onClick(View v) {
 				player.setName(editText.getText().toString());
 				playerNameText.setText(player.getName());
-				gameManager.savePlayers(players);
+				gameManager.savePlayers(allPlayers);
 				inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 				dialog.dismiss();
 			}
@@ -246,6 +265,11 @@ public class ShowRolesActivity extends AbstractActivity {
 				dialog.dismiss();
 			}
 		});
+	}
+
+
+	private Player getCurrentPlayer() {
+		return allPlayers != null ? allPlayers.get(currentPlayerIdx) : singlePlayer;
 	}
 
 

@@ -3,7 +3,9 @@ package org.faudroids.werewolf.core;
 
 import android.support.annotation.NonNull;
 
-public class Player implements Comparable<Player> {
+import java.io.Serializable;
+
+public class Player implements Comparable<Player>, Serializable {
 
     private int id = 0;
     private boolean isSeen = false;

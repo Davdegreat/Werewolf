@@ -16,8 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.ShowRolesActivity" />
-        <activity android:name=".ui.GameSetupActivity">
-        </activity>
+        <activity android:name=".ui.GameSetupActivity" />
+        <activity android:name=".ui.PlayersOverviewActivity" />
     </application>
 
 </manifest>
