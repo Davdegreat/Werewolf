@@ -37,13 +37,18 @@ public class GameManager {
     }
 
 
-    public List<Player> loadPlayers(){
+	public boolean existsOldGame() {
+		loadPlayers();
+		return playersCache != null;
+	}
+
+
+    public List<Player> loadPlayers() {
 		if (playersCache != null) return playersCache;
         try {
 			playersCache = gson.fromJson(new FileReader(new File(context.getFilesDir(), PLAYERS_FILENAME)), playersType);
 			return playersCache;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
             return null;
         }
     }

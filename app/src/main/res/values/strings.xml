@@ -40,5 +40,9 @@
     <string name="change_player_name_hint">Player name</string>
     <string name="error_empty_name">Name cannot be empty</string>
     <string name="error_duplicate_name">Name already exists</string>
+    <string name="new_game">New Game</string>
+    <string name="continue_game">Continue</string>
+
+    <string name="love_message">Made by a small team of night time coders.\nThanks for your support!</string>
 
 </resources>

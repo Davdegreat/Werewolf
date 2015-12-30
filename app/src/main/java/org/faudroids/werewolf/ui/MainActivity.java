@@ -17,8 +17,10 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.activity_main)
 public class MainActivity extends AbstractActivity {
 
-	@InjectView(R.id.btn_test_roles) private Button testRolesButton;
-	@InjectView(R.id.btn_new_game) private Button newGameButton;
+	private static final int REQUEST_START_GAME = 42;
+
+	@InjectView(R.id.btn_new_game) private Button newGameBtn;
+	@InjectView(R.id.btn_continue_game) private Button continueGameBtn;
 
 	@Inject private GameManager gameManager;
 
@@ -26,20 +28,32 @@ public class MainActivity extends AbstractActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		newGameButton.setOnClickListener(new View.OnClickListener() {
+		newGameBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(MainActivity.this, GameSetupActivity.class));
+				startActivityForResult(new Intent(MainActivity.this, GameSetupActivity.class), REQUEST_START_GAME);
 			}
 		});
 
-		testRolesButton.setOnClickListener(new View.OnClickListener() {
+		setupContinueBtnVisibility();
+		continueGameBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				gameManager.createRandomTestPlayers(2);
 				startActivity(new Intent(MainActivity.this, ShowRolesActivity.class));
 			}
 		});
+	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+			case REQUEST_START_GAME:
+				setupContinueBtnVisibility();
+				return;
+		}
+	}
+
+	private void setupContinueBtnVisibility() {
+		continueGameBtn.setVisibility(gameManager.existsOldGame() ? View.VISIBLE : View.GONE);
 	}
 }

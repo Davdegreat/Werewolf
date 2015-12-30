@@ -98,6 +98,7 @@ public class ShowRolesActivity extends AbstractActivity {
 			}
 			if (idx == -1) {
 				Timber.d("all players have seen their role");
+				startActivity(new Intent(this, PlayersOverviewActivity.class));
 				finish();
 				return;
 			}
