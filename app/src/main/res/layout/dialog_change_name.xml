@@ -34,9 +34,10 @@
             android:id="@+id/btn_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:background="@null"
             android:text="@android:string/ok"
-            android:layout_alignParentRight="true"
+            android:textAllCaps="true"
             style="?android:attr/borderlessButtonStyle"
             />
 
@@ -44,9 +45,10 @@
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/btn_ok"
             android:background="@null"
             android:text="@android:string/cancel"
-            android:layout_toLeftOf="@id/btn_ok"
+            android:textAllCaps="true"
             style="?android:attr/borderlessButtonStyle"
             />
 
