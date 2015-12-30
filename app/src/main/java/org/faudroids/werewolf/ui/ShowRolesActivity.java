@@ -4,6 +4,7 @@ package org.faudroids.werewolf.ui;
 import android.content.Intent;
 import android.graphics.Path;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.AnimRes;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -58,6 +59,8 @@ public class ShowRolesActivity extends AbstractActivity {
 	@InjectView(R.id.btn_next) private ImageButton nextButton;
 
 	@Inject private GameManager gameManager;
+
+	private Handler handler = new Handler();
 
 	// not null if viewing only one player
 	private Player singlePlayer = null;
@@ -136,7 +139,7 @@ public class ShowRolesActivity extends AbstractActivity {
 						.interpolator(new AccelerateDecelerateInterpolator())
 						.start();
 
-				instructionsLayout.postDelayed(new Runnable() {
+				handler.postDelayed(new Runnable() {
 					@Override
 					public void run() {
 						// check if role needs to be hidden
@@ -180,6 +183,13 @@ public class ShowRolesActivity extends AbstractActivity {
 
 
 	private void goToNextRole() {
+		if (currentPlayerIdx + 1 >= allPlayers.size()) {
+			Timber.d("done viewing all players");
+			startActivity(new Intent(this, PlayersOverviewActivity.class));
+			finish();
+			return;
+		}
+
 		instructionsLayout.startAnimation(loadAnimation(R.anim.move_forward));
 		setCurrentPlayerIdx(currentPlayerIdx + 1, true);
 	}
@@ -193,13 +203,6 @@ public class ShowRolesActivity extends AbstractActivity {
 
 	private void setCurrentPlayerIdx(int currentPlayerIdx, boolean delayChangeRoleView) {
 		this.currentPlayerIdx = currentPlayerIdx;
-		if (currentPlayerIdx >= allPlayers.size()) {
-			Timber.d("done viewing all players");
-			startActivity(new Intent(this, PlayersOverviewActivity.class));
-			finish();
-			return;
-		}
-
 		final Player player = allPlayers.get(currentPlayerIdx);
 
 		// toggle nav buttons
@@ -346,6 +349,7 @@ public class ShowRolesActivity extends AbstractActivity {
 
 		// check if role should be hidden
 		if (isRoleVisible()) {
+			handler.removeCallbacksAndMessages(null);
 			hideRole();
 			return;
 		}
