@@ -88,7 +88,7 @@
                 android:id="@+id/btn_reveal"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:background="@drawable/selector_accent_large"
+                android:src="@drawable/selector_accent_large"
                 android:layout_centerInParent="true"
                 />
 
@@ -102,6 +102,7 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/txt_instructions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -119,25 +120,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:padding="@dimen/margin_default"
         >
 
         <ImageButton
             android:id="@+id/btn_next"
             android:layout_width="@dimen/nav_button_size"
             android:layout_height="@dimen/nav_button_size"
-            android:background="@drawable/selector_role_nav_button"
+            android:background="@drawable/selector_accent_large"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_arrow_forward"
+            android:layout_margin="@dimen/margin_default"
             />
 
         <ImageButton
             android:id="@+id/btn_back"
             android:layout_width="@dimen/nav_button_size"
             android:layout_height="@dimen/nav_button_size"
-            android:background="@drawable/selector_role_nav_button"
+            android:background="@drawable/selector_primary_large"
+            android:enabled="false"
             android:layout_alignParentLeft="true"
             android:src="@drawable/ic_arrow_back"
+            android:layout_margin="@dimen/margin_default"
             />
 
     </RelativeLayout>

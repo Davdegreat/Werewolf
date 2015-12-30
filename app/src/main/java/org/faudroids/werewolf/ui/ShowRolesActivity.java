@@ -17,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -44,7 +45,8 @@ public class ShowRolesActivity extends AbstractActivity {
 	@InjectView(R.id.layout_instructions) private View instructionsLayout;
 	@InjectView(R.id.txt_player_name) private TextView playerNameText;
 	@InjectView(R.id.btn_edit_player_name) private View editPlayerNameBtn;
-	@InjectView(R.id.btn_reveal) private View revealButton;
+	@InjectView(R.id.btn_reveal) private ImageView revealButton;
+	@InjectView(R.id.txt_instructions) private TextView instructionsText;
 
 	@InjectView(R.id.layout_role) private View roleLayout;
 	@InjectView(R.id.img_icon) private PathView iconView;
@@ -188,7 +190,7 @@ public class ShowRolesActivity extends AbstractActivity {
 	}
 
 
-	private void setCurrentPlayerIdx(int currentPlayerIdx, boolean delaySetPlayerName) {
+	private void setCurrentPlayerIdx(int currentPlayerIdx, boolean delayChangeRoleView) {
 		this.currentPlayerIdx = currentPlayerIdx;
 		if (currentPlayerIdx >= allPlayers.size()) {
 			Timber.d("done viewing all players");
@@ -200,17 +202,20 @@ public class ShowRolesActivity extends AbstractActivity {
 		final Player player = allPlayers.get(currentPlayerIdx);
 
 		// toggle nav buttons
-		nextButton.setEnabled(player.isSeen());
+		nextButton.setVisibility(player.isSeen() ? View.VISIBLE : View.GONE);
 		if (currentPlayerIdx + 1 == allPlayers.size()) nextButton.setImageResource(R.drawable.ic_done);
 		else nextButton.setImageResource(R.drawable.ic_arrow_forward);
 		backButton.setVisibility(currentPlayerIdx != 0 ? View.VISIBLE : View.GONE);
 
-		// update player name
-		int delay = delaySetPlayerName ? getResources().getInteger(R.integer.anim_swipe_role_duration) : 0;
+		int delay = delayChangeRoleView ? getResources().getInteger(R.integer.anim_swipe_role_duration) : 0;
 		playerNameText.postDelayed(new Runnable() {
 			@Override
 			public void run() {
+				// update player name
 				playerNameText.setText(player.getName());
+
+				// toggle pulse next action
+				highlightNextAction();
 			}
 		}, delay);
 
@@ -229,12 +234,30 @@ public class ShowRolesActivity extends AbstractActivity {
 		roleLayout.startAnimation(loadAnimation(R.anim.fade_out));
 
 		// enable showing next player role
-		nextButton.setEnabled(true);
+		nextButton.setVisibility(View.VISIBLE);
+
+		// toggle pulse next action
+		highlightNextAction();
 	}
 
 
 	private boolean isRoleVisible() {
 		return !revealButton.isEnabled();
+	}
+
+
+	private void highlightNextAction() {
+		if (!getCurrentPlayer().isSeen()) {
+			revealButton.setImageResource(R.drawable.selector_accent_large);
+			revealButton.startAnimation(loadAnimation(R.anim.pulse));
+			nextButton.clearAnimation();
+			instructionsText.setText(R.string.touch_to_reveal_role);
+		} else {
+			revealButton.setImageResource(R.drawable.selector_primary_large);
+			nextButton.startAnimation(loadAnimation(R.anim.pulse));
+			revealButton.clearAnimation();
+			instructionsText.setText(R.string.hand_to_next_player);
+		}
 	}
 
 
