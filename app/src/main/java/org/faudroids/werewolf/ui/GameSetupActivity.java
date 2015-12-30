@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,16 +30,16 @@ public class GameSetupActivity extends AbstractActivity {
     @InjectView(R.id.cnf_autoassign_btn) private Button mAutoAssignButton;
     @InjectView(R.id.cnf_tobeassigned_label) private TextView mToBeAssignedTextView;
 
-    @InjectView(R.id.cnf_player_count_picker) private NumberPicker mPlayerCountPicker;
+    @InjectView(R.id.cnf_player_count_picker) private NumberPickerView mPlayerCountPicker;
 
-    @InjectView(R.id.cnf_werewolf_count_picker) private NumberPicker mWerewolfCountPicker;
-    @InjectView(R.id.cnf_villager_count_picker) private NumberPicker mVillagerCountPicker;
-    @InjectView(R.id.cnf_seer_count_picker) private NumberPicker mSeerCountPicker;
-    @InjectView(R.id.cnf_doctor_count_picker) private NumberPicker mDoctorCountPicker;
-    @InjectView(R.id.cnf_hunter_count_picker) private NumberPicker mHunterCountPicker;
-    @InjectView(R.id.cnf_witch_count_picker) private NumberPicker mWitchCountPicker;
-    @InjectView(R.id.cnf_priest_count_picker) private NumberPicker mPriestCountPicker;
-    @InjectView(R.id.cnf_amor_count_picker) private NumberPicker mAmorCountPicker;
+    @InjectView(R.id.cnf_werewolf_count_picker) private NumberPickerView mWerewolfCountPicker;
+    @InjectView(R.id.cnf_villager_count_picker) private NumberPickerView mVillagerCountPicker;
+    @InjectView(R.id.cnf_seer_count_picker) private NumberPickerView mSeerCountPicker;
+    @InjectView(R.id.cnf_doctor_count_picker) private NumberPickerView mDoctorCountPicker;
+    @InjectView(R.id.cnf_hunter_count_picker) private NumberPickerView mHunterCountPicker;
+    @InjectView(R.id.cnf_witch_count_picker) private NumberPickerView mWitchCountPicker;
+    @InjectView(R.id.cnf_priest_count_picker) private NumberPickerView mPriestCountPicker;
+    @InjectView(R.id.cnf_amor_count_picker) private NumberPickerView mAmorCountPicker;
 
     @InjectView(R.id.cnf_start_btn) private Button mStartButton;
 
@@ -49,8 +48,8 @@ public class GameSetupActivity extends AbstractActivity {
 
     private final int DEFAULT_PLAYER_COUNT = 10;
 
-    private List<NumberPicker> allPickers;
-    private List<NumberPicker> specialRolePickers;
+    private List<NumberPickerView> allPickers;
+    private List<NumberPickerView> specialRolePickers;
     private int mToBeAssignedCount = DEFAULT_PLAYER_COUNT;
 
     @Override
@@ -76,79 +75,73 @@ public class GameSetupActivity extends AbstractActivity {
         specialRolePickers.add(mAmorCountPicker);
 
 
-        for(NumberPicker np : allPickers){
+        for(NumberPickerView np : allPickers){
             np.setMinValue(0);
-            np.setWrapSelectorWheel(false);
         }
 
         mAutoAssignButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int playerCount = mPlayerCountPicker.getValue();
-                int villagersCount = playerCount / 2 + playerCount % 2;
-                int werewolfCount = playerCount / 2;
+			@Override
+			public void onClick(View v) {
+				int playerCount = mPlayerCountPicker.getValue();
+				int villagersCount = playerCount / 2 + playerCount % 2;
+				int werewolfCount = playerCount / 2;
 
-                for (NumberPicker np : specialRolePickers) {
-                    np.setMinValue(0);
-                    if (villagersCount > 2) {
-                        villagersCount--;
-                        np.setMaxValue(1);
-                        np.setValue(1);
-                    } else {
-                        np.setMaxValue(0);
-                        np.setValue(0);
-                    }
-                    np.setWrapSelectorWheel(false);
-                }
+				for (NumberPickerView np : specialRolePickers) {
+					np.setMinValue(0);
+					if (villagersCount > 2) {
+						villagersCount--;
+						np.setMaxValue(1);
+						np.setValue(1);
+					} else {
+						np.setMaxValue(0);
+						np.setValue(0);
+					}
+				}
 
-                mWerewolfCountPicker.setMinValue(0);
-                mWerewolfCountPicker.setMaxValue(werewolfCount);
-                mWerewolfCountPicker.setValue(werewolfCount);
-                mWerewolfCountPicker.setWrapSelectorWheel(false);
+				mWerewolfCountPicker.setMinValue(0);
+				mWerewolfCountPicker.setMaxValue(werewolfCount);
+				mWerewolfCountPicker.setValue(werewolfCount);
 
-                mVillagerCountPicker.setMinValue(0);
-                mVillagerCountPicker.setMaxValue(villagersCount);
-                mVillagerCountPicker.setValue(villagersCount);
-                mVillagerCountPicker.setWrapSelectorWheel(false);
+				mVillagerCountPicker.setMinValue(0);
+				mVillagerCountPicker.setMaxValue(villagersCount);
+				mVillagerCountPicker.setValue(villagersCount);
 
 
-                mToBeAssignedCount = 0;
-                mToBeAssignedTextView.setText("" + mToBeAssignedCount);
-            }
+				mToBeAssignedCount = 0;
+				mToBeAssignedTextView.setText("" + mToBeAssignedCount);
+			}
 
 
-        });
+		});
 
         // default player count
         mToBeAssignedTextView.setText("" + DEFAULT_PLAYER_COUNT);
         mPlayerCountPicker.setMinValue(3);
         mPlayerCountPicker.setMaxValue(100);
         mPlayerCountPicker.setValue(DEFAULT_PLAYER_COUNT);
-        mPlayerCountPicker.setWrapSelectorWheel(false);
 
-        NumberPicker.OnValueChangeListener listener = new NumberPicker.OnValueChangeListener() {
+        NumberPickerView.OnValueChangeListener listener = new NumberPickerView.OnValueChangeListener() {
             @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+            public void onValueChange(NumberPickerView picker, int oldVal, int newVal) {
                 int playerCount = mPlayerCountPicker.getValue();
 
                 int assignedPlayerCount = 0;
-                for(NumberPicker np : allPickers){
+                for(NumberPickerView np : allPickers){
                     assignedPlayerCount += np.getValue();
                 }
 
                 mToBeAssignedCount = playerCount - assignedPlayerCount;
                 if(mToBeAssignedCount >= 0) {
-                    for (NumberPicker np : allPickers) {
+                    for (NumberPickerView np : allPickers) {
                         np.setMinValue(0);
                         np.setMaxValue(np.getValue() + mToBeAssignedCount);
-                        np.setWrapSelectorWheel(false);
                     }
                 } else {
                    // too many assigned roles => players.size() < assignedRoles.size()
                    // iterate through assigned Roles trying to decrement special roles first
-                  ListIterator<NumberPicker> it = allPickers.listIterator(allPickers.size());
+                  ListIterator<NumberPickerView> it = allPickers.listIterator(allPickers.size());
                    while(it.hasPrevious()){
-                       NumberPicker currPicker = it.previous();
+                       NumberPickerView currPicker = it.previous();
                        int currVal = currPicker.getValue();
                        if(currVal > 0){
 
@@ -163,7 +156,6 @@ public class GameSetupActivity extends AbstractActivity {
                            currPicker.setMinValue(0);
                            currPicker.setMaxValue(currVal);
                            currPicker.setValue(currVal);
-                           currPicker.setWrapSelectorWheel(false);
                        }
 
                        if(mToBeAssignedCount >= 0){ break; }
@@ -175,10 +167,10 @@ public class GameSetupActivity extends AbstractActivity {
             }
         };
 
-        mPlayerCountPicker.setOnValueChangedListener(listener);
+        mPlayerCountPicker.setOnValueChangeListener(listener);
 
-        for(NumberPicker np : allPickers){
-            np.setOnValueChangedListener(listener);
+        for(NumberPickerView np : allPickers){
+            np.setOnValueChangeListener(listener);
         }
 
         mStartButton.setOnClickListener(new View.OnClickListener() {

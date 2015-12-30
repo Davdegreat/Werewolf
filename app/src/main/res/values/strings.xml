@@ -19,14 +19,14 @@
     <string name="role_amor_goal">Choose a love couple</string>
     <string name="touch_to_reveal_role">Touch to reveal role</string>
     <string name="cnf_player_count_label">Number of Players:</string>
-    <string name="cnf_werewolf_count_label">Number of Werewolfes:</string>
-    <string name="cnf_villager_count_label">Number of Villagers</string>
-    <string name="cnf_seer_count_label">Number of Seers</string>
-    <string name="cnf_doctor_count_label">Number of Doctors</string>
-    <string name="cnf_hunter_count_label">Number of Hunters</string>
-    <string name="cnf_witch_count_label">Number of Witches</string>
-    <string name="cnf_priest_count_label">Number of Priests</string>
-    <string name="cnf_amor_count_label">Number of Amors</string>
+    <string name="cnf_werewolf_count_label">Werewolfes:</string>
+    <string name="cnf_villager_count_label">Villagers</string>
+    <string name="cnf_seer_count_label">Seers</string>
+    <string name="cnf_doctor_count_label">Doctors</string>
+    <string name="cnf_hunter_count_label">Hunters</string>
+    <string name="cnf_witch_count_label">Witches</string>
+    <string name="cnf_priest_count_label">Priests</string>
+    <string name="cnf_amor_count_label">Amors</string>
     <string name="cnf_autoassign_btn_label">Auto Assign</string>
     <string name="cnf_start_btn_label">Start Game</string>
 
