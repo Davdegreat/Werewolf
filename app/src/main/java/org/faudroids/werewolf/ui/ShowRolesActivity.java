@@ -16,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -51,8 +52,8 @@ public class ShowRolesActivity extends AbstractActivity {
 	@InjectView(R.id.txt_role_description) private TextView roleDescriptionText;
 
 	@InjectView(R.id.layout_nav) private View navLayout;
-	@InjectView(R.id.btn_back) private View backButton;
-	@InjectView(R.id.btn_next) private View nextButton;
+	@InjectView(R.id.btn_back) private ImageButton backButton;
+	@InjectView(R.id.btn_next) private ImageButton nextButton;
 
 	@Inject private GameManager gameManager;
 
@@ -198,6 +199,8 @@ public class ShowRolesActivity extends AbstractActivity {
 
 		final Player player = allPlayers.get(currentPlayerIdx);
 		nextButton.setEnabled(player.isSeen());
+		if (currentPlayerIdx + 1 == allPlayers.size()) nextButton.setImageResource(R.drawable.ic_done);
+		else nextButton.setImageResource(R.drawable.ic_arrow_forward);
 		backButton.setVisibility(currentPlayerIdx != 0 ? View.VISIBLE : View.GONE);
 		int delay = delaySetPlayerName ? getResources().getInteger(R.integer.anim_swipe_role_duration) : 0;
 		playerNameText.postDelayed(new Runnable() {
