@@ -42,6 +42,7 @@ public class GameSetupActivity extends AbstractActivity {
 	@InjectView(R.id.cnf_witch_count_picker) private NumberPickerView mWitchCountPicker;
 	@InjectView(R.id.cnf_priest_count_picker) private NumberPickerView mPriestCountPicker;
 	@InjectView(R.id.cnf_amor_count_picker) private NumberPickerView mAmorCountPicker;
+	@InjectView(R.id.cnf_drunk_count_picker) private NumberPickerView mDrunkCountPicker;
 
 	@InjectView(R.id.cnf_start_btn) private Button mStartButton;
 
@@ -62,7 +63,8 @@ public class GameSetupActivity extends AbstractActivity {
 				mHunterCountPicker,
 				mWitchCountPicker,
 				mPriestCountPicker,
-				mAmorCountPicker
+				mAmorCountPicker,
+				mDrunkCountPicker
 		);
 
 		specialRolePickers = Lists.newArrayList(
@@ -71,7 +73,8 @@ public class GameSetupActivity extends AbstractActivity {
 				mHunterCountPicker,
 				mWitchCountPicker,
 				mPriestCountPicker,
-				mAmorCountPicker
+				mAmorCountPicker,
+				mDrunkCountPicker
 		);
 
 		for (NumberPickerView np : allPickers) {
@@ -197,6 +200,7 @@ public class GameSetupActivity extends AbstractActivity {
 		createPlayers(players, mWitchCountPicker, Role.WITCH);
 		createPlayers(players, mPriestCountPicker, Role.PRIEST);
 		createPlayers(players, mAmorCountPicker, Role.AMOR);
+		createPlayers(players, mDrunkCountPicker, Role.DRUNK);
 		Collections.shuffle(players);
 		for (int i = 0; i < players.size(); ++i) {
 			Player player = players.get(i);

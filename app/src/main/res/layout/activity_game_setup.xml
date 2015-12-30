@@ -191,6 +191,24 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/SetupRoleCountText"
+                android:text="@string/cnf_drunk_count_label"
+                />
+
+            <org.faudroids.werewolf.ui.NumberPickerView
+                android:id="@+id/cnf_drunk_count_picker"
+                style="@style/SetupRoleCountPicker"
+                />
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/cnf_start_btn"
             android:layout_width="match_parent"

@@ -16,7 +16,8 @@ public enum Role {
 	HUNTER(R.raw.icon_hunter, R.string.role_hunter_name, R.string.role_hunter_goal),
 	WITCH(R.raw.icon_witch, R.string.role_witch_name, R.string.role_witch_goal),
 	PRIEST(R.raw.icon_priest, R.string.role_priest_name, R.string.role_priest_goal),
-	AMOR(R.raw.icon_amor, R.string.role_amor_name, R.string.role_amor_goal);
+	AMOR(R.raw.icon_amor, R.string.role_amor_name, R.string.role_amor_goal),
+	DRUNK(R.raw.icon_drunk, R.string.role_drunk_name, R.string.role_drunk_goal);
 
 	@RawRes private final int iconId;
 	@StringRes private final int nameId;

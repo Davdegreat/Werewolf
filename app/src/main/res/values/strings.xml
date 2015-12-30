@@ -17,6 +17,8 @@
     <string name="role_priest_goal">Burn one werewolf</string>
     <string name="role_amor_name">Amor</string>
     <string name="role_amor_goal">Choose a love couple</string>
+    <string name="role_drunk_name">Drunk</string>
+    <string name="role_drunk_goal">2 lives, vote only in the first one</string>
 
     <string name="touch_to_reveal_role">Touch to reveal role</string>
     <string name="hand_to_next_player">Hand device to next player</string>
@@ -30,6 +32,7 @@
     <string name="cnf_witch_count_label">Witches</string>
     <string name="cnf_priest_count_label">Priests</string>
     <string name="cnf_amor_count_label">Amors</string>
+    <string name="cnf_drunk_count_label">Drunks</string>
     <string name="cnf_auto_assign_label">Auto assign roles</string>
     <string name="cnf_start_btn_label">Start Game</string>
     <string name="cnf_x_players_unassigned">%1$d players unassigned</string>
