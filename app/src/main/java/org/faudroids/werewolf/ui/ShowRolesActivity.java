@@ -117,7 +117,7 @@ public class ShowRolesActivity extends AbstractActivity {
 				// update player
 				Player player = getCurrentPlayer();
 				player.setIsSeen(true);
-				gameManager.savePlayers(allPlayers);
+				gameManager.savePlayer(player);
 
 				// toggle layouts
 				roleLayout.startAnimation(loadAnimation(R.anim.fade_in));
