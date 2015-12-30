@@ -198,10 +198,14 @@ public class ShowRolesActivity extends AbstractActivity {
 		}
 
 		final Player player = allPlayers.get(currentPlayerIdx);
+
+		// toggle nav buttons
 		nextButton.setEnabled(player.isSeen());
 		if (currentPlayerIdx + 1 == allPlayers.size()) nextButton.setImageResource(R.drawable.ic_done);
 		else nextButton.setImageResource(R.drawable.ic_arrow_forward);
 		backButton.setVisibility(currentPlayerIdx != 0 ? View.VISIBLE : View.GONE);
+
+		// update player name
 		int delay = delaySetPlayerName ? getResources().getInteger(R.integer.anim_swipe_role_duration) : 0;
 		playerNameText.postDelayed(new Runnable() {
 			@Override
@@ -209,6 +213,10 @@ public class ShowRolesActivity extends AbstractActivity {
 				playerNameText.setText(player.getName());
 			}
 		}, delay);
+
+		// update title
+		if (getSupportActionBar() == null) return;
+		getSupportActionBar().setTitle(getString(R.string.player_x_of_y, currentPlayerIdx + 1, allPlayers.size()));
 	}
 
 
