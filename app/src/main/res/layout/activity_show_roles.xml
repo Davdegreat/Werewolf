@@ -25,6 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Player 0"
+                android:gravity="center"
                 android:textColor="@android:color/black"
                 android:textSize="38sp"
                 android:fontFamily="sans-serif-light"
