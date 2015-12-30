@@ -28,6 +28,10 @@ public class PlayersOverviewActivity extends AbstractActivity {
 
 	@Inject private GameManager gameManager;
 
+	public PlayersOverviewActivity() {
+		super(true);
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -65,6 +65,9 @@ public class ShowRolesActivity extends AbstractActivity {
 
 	@Inject private InputMethodManager inputMethodManager;
 
+	public ShowRolesActivity() {
+		super(true);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
