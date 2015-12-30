@@ -206,7 +206,6 @@ public class GameSetupActivity extends AbstractActivity {
 
 		if (mGameManager.savePlayers(players)) {
 			startActivity(new Intent(GameSetupActivity.this, ShowRolesActivity.class));
-			finish();
 		} else {
 			Toast.makeText(this, "Something went wrong...", Toast.LENGTH_LONG).show();
 		}
