@@ -6,9 +6,6 @@ import android.graphics.Path;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.AnimRes;
-import android.support.v7.app.AlertDialog;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +13,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -263,64 +259,29 @@ public class ShowRolesActivity extends AbstractActivity {
 
 	private void onEditPlayerName() {
 		final Player player = getCurrentPlayer();
-		View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_name, null);
-		final EditText editText = (EditText) dialogView.findViewById(R.id.name_edit);
-		editText.setText(player.getName());
-		final TextView errorView = (TextView) dialogView.findViewById(R.id.error_txt);
-		final View okBtn = dialogView.findViewById(R.id.btn_ok);
-		final View cancelBtn = dialogView.findViewById(R.id.btn_cancel);
-
-		editText.addTextChangedListener(new TextWatcher() {
+		InputDialog inputDialog = new InputDialog(this, R.string.change_player_name);
+		inputDialog.setInitialInput(player.getName());
+		inputDialog.setInputListener(new InputDialog.InputListener() {
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				boolean isError = false;
-				String newPlayerName = editText.getText().toString();
+			public InputDialog.ValidationResult isInputValid(String newPlayerName) {
 				if (newPlayerName.isEmpty()) {
-					errorView.setText(R.string.error_empty_name);
-					isError = true;
+					return new InputDialog.ValidationResult(false, R.string.error_empty_name);
 				}
 				Player playerWithSameName = gameManager.findPlayerByName(newPlayerName);
 				if (playerWithSameName != null && playerWithSameName.getId() != getCurrentPlayer().getId()) {
-					errorView.setText(R.string.error_duplicate_name);
-					isError = true;
+					return new InputDialog.ValidationResult(false, R.string.error_duplicate_name);
 				}
-				errorView.setVisibility(isError ? View.VISIBLE : View.GONE);
-				okBtn.setEnabled(!isError);
+				return new InputDialog.ValidationResult(true, 0);
 			}
-		});
 
-		final AlertDialog dialog = new AlertDialog.Builder(this)
-				.setTitle(R.string.change_player_name)
-				.setView(dialogView)
-				.show();
-		editText.requestFocus();
-		inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-
-		okBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				player.setName(editText.getText().toString());
+			public void onConfirm(String newPlayerName) {
+				player.setName(newPlayerName);
 				playerNameText.setText(player.getName());
 				gameManager.savePlayer(player);
-				inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-				dialog.dismiss();
 			}
 		});
-		cancelBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-				dialog.dismiss();
-			}
-		});
+		inputDialog.show();
 	}
 
 
