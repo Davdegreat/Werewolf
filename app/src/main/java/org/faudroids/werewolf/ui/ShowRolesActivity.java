@@ -329,9 +329,18 @@ public class ShowRolesActivity extends AbstractActivity {
 	}
 
 
-	private void setVisibilityBySliding(View targetView, boolean visible, long duration) {
+	private void setVisibilityBySliding(final View targetView, final boolean visible, final long duration) {
 		if (visible) targetView.animate().translationY(0).setDuration(duration);
 		else targetView.animate().translationYBy(getResources().getDimension(R.dimen.nav_button_slide_distance)).setDuration(duration);
+
+		// disable clicks during animation
+		targetView.setClickable(false);
+		targetView.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				if (visible) targetView.setClickable(true);
+			}
+		}, duration);
 	}
 
 
