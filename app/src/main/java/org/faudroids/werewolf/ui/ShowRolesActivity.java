@@ -108,7 +108,7 @@ public class ShowRolesActivity extends AbstractActivity {
 		revealButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				revealButton.setEnabled(false);
+				revealButton.setClickable(false);
 
 				// update player
 				Player player = getCurrentPlayer();
@@ -224,7 +224,7 @@ public class ShowRolesActivity extends AbstractActivity {
 
 
 	private void hideRole() {
-		revealButton.setEnabled(true);
+		revealButton.setClickable(true);
 
 		// toggle layouts
 		roleLayout.startAnimation(loadAnimation(R.anim.fade_out));
@@ -238,7 +238,7 @@ public class ShowRolesActivity extends AbstractActivity {
 
 
 	private boolean isRoleVisible() {
-		return !revealButton.isEnabled();
+		return !revealButton.isClickable();
 	}
 
 
