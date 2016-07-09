@@ -14,6 +14,7 @@ import org.faudroids.werewolf.R;
 import org.faudroids.werewolf.core.GameManager;
 import org.faudroids.werewolf.core.Player;
 import org.faudroids.werewolf.core.Role;
+import org.faudroids.werewolf.core.RoleFactory;
 import org.roboguice.shaded.goole.common.collect.Lists;
 
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class GameSetupActivity extends AbstractActivity {
 	@InjectView(R.id.cnf_start_btn) private Button mStartButton;
 
 	@Inject private GameManager mGameManager;
+	@Inject private RoleFactory roleFactory;
 
 	private List<NumberPickerView> allPickers;
 	private List<NumberPickerView> specialRolePickers;
@@ -209,15 +211,15 @@ public class GameSetupActivity extends AbstractActivity {
 
 	private void startGame() {
 		List<Player> players = new ArrayList<>(mPlayerCountPicker.getValue());
-		createPlayers(players, mWerewolfCountPicker, Role.WEREWOLF);
-		createPlayers(players, mVillagerCountPicker, Role.VILLAGER);
-		createPlayers(players, mSeerCountPicker, Role.SEER);
-		createPlayers(players, mDoctorCountPicker, Role.DOCTOR);
-		createPlayers(players, mHunterCountPicker, Role.HUNTER);
-		createPlayers(players, mWitchCountPicker, Role.WITCH);
-		createPlayers(players, mPriestCountPicker, Role.PRIEST);
-		createPlayers(players, mAmorCountPicker, Role.AMOR);
-		createPlayers(players, mDrunkCountPicker, Role.DRUNK);
+		createPlayers(players, mWerewolfCountPicker, roleFactory.werewolf());
+		createPlayers(players, mVillagerCountPicker, roleFactory.villager());
+		createPlayers(players, mSeerCountPicker, roleFactory.seer());
+		createPlayers(players, mDoctorCountPicker, roleFactory.doctor());
+		createPlayers(players, mHunterCountPicker, roleFactory.hunter());
+		createPlayers(players, mWitchCountPicker, roleFactory.witch());
+		createPlayers(players, mPriestCountPicker, roleFactory.priest());
+		createPlayers(players, mAmorCountPicker, roleFactory.amor());
+		createPlayers(players, mDrunkCountPicker, roleFactory.drunk());
 		for (Map.Entry<Role, NumberPickerView> customRolePicker : customRolePickers.entrySet()) {
 			createPlayers(players, customRolePicker.getValue(), customRolePicker.getKey());
 		}
@@ -278,7 +280,7 @@ public class GameSetupActivity extends AbstractActivity {
 		if (mAutoAssignCb.isChecked()) picker.setEnabled(false);
 		picker.setOnValueChangeListener(onRoleCountChangeListener);
 		onRoleCountChangeListener.onValueChange(picker, 0, 0);
-		customRolePickers.put(Role.createCustomRole(newRoleName), picker);
+		customRolePickers.put(roleFactory.customRole(newRoleName), picker);
 	}
 
 }

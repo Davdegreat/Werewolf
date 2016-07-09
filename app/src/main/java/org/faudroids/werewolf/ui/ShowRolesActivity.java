@@ -122,9 +122,8 @@ public class ShowRolesActivity extends AbstractActivity {
 
 				// show role text
 				Role role = player.getRole();
-				if (role.getName() != null) roleNameText.setText(role.getName());
-				else roleNameText.setText(role.getNameId());
-				roleDescriptionText.setText(role.getGoalId());
+				roleNameText.setText(role.getName());
+				roleDescriptionText.setText(role.getGoal());
 
 				// show role icon
 				assertPathView();
