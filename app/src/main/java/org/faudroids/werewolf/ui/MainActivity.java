@@ -39,6 +39,7 @@ public class MainActivity extends AbstractActivity {
 		continueGameBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				gameManager.loadPlayers();
 				startActivity(new Intent(MainActivity.this, ShowRolesActivity.class));
 			}
 		});

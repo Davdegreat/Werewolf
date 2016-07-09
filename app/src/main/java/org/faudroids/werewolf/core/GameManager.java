@@ -36,15 +36,14 @@ public class GameManager {
 
 
 	public boolean existsOldGame() {
-		loadPlayers();
-		return playersCache != null;
+		return getPlayersFile().exists();
 	}
 
 
     public List<Player> loadPlayers() {
 		if (playersCache != null) return playersCache;
         try {
-			playersCache = gson.fromJson(new FileReader(new File(context.getFilesDir(), PLAYERS_FILENAME)), playersType);
+			playersCache = gson.fromJson(new FileReader(getPlayersFile()), playersType);
 			return playersCache;
         } catch (FileNotFoundException e) {
 			Timber.w(e, "failed to find players file");
@@ -83,6 +82,10 @@ public class GameManager {
 			if (player.getName().equalsIgnoreCase(name)) return player;
 		}
 		return null;
+	}
+
+	private File getPlayersFile() {
+		return new File(context.getFilesDir(), PLAYERS_FILENAME);
 	}
 
 }
