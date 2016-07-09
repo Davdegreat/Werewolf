@@ -20,6 +20,7 @@ import org.roboguice.shaded.goole.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -56,9 +57,8 @@ public class GameSetupActivity extends AbstractActivity {
 	@Inject private GameManager mGameManager;
 	@Inject private RoleFactory roleFactory;
 
-	private List<NumberPickerView> allPickers;
+	private final Map<Role, NumberPickerView> allPickers = new HashMap<>();
 	private List<NumberPickerView> specialRolePickers;
-	private final Map<Role, NumberPickerView> customRolePickers = new HashMap<>();
 
 	private NumberPickerView.OnValueChangeListener onRoleCountChangeListener;
 
@@ -66,17 +66,15 @@ public class GameSetupActivity extends AbstractActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		allPickers = Lists.newArrayList(
-				mWerewolfCountPicker,
-				mVillagerCountPicker,
-				mSeerCountPicker,
-				mDoctorCountPicker,
-				mHunterCountPicker,
-				mWitchCountPicker,
-				mPriestCountPicker,
-				mAmorCountPicker,
-				mDrunkCountPicker
-		);
+		allPickers.put(roleFactory.werewolf(), mWerewolfCountPicker);
+		allPickers.put(roleFactory.villager(), mVillagerCountPicker);
+		allPickers.put(roleFactory.seer(), mSeerCountPicker);
+		allPickers.put(roleFactory.doctor(), mDoctorCountPicker);
+		allPickers.put(roleFactory.hunter(), mHunterCountPicker);
+		allPickers.put(roleFactory.witch(), mWitchCountPicker);
+		allPickers.put(roleFactory.priest(), mPriestCountPicker);
+		allPickers.put(roleFactory.amor(), mAmorCountPicker);
+		allPickers.put(roleFactory.drunk(), mDrunkCountPicker);
 
 		specialRolePickers = Lists.newArrayList(
 				mSeerCountPicker,
@@ -88,7 +86,7 @@ public class GameSetupActivity extends AbstractActivity {
 				mDrunkCountPicker
 		);
 
-		for (NumberPickerView np : allPickers) {
+		for (NumberPickerView np : allPickers.values()) {
 			np.setMinValue(0);
 			np.setEnabled(false);
 		}
@@ -97,7 +95,7 @@ public class GameSetupActivity extends AbstractActivity {
 		mAutoAssignCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				for (NumberPickerView pickerView : allPickers) {
+				for (NumberPickerView pickerView : allPickers.values()) {
 					pickerView.setEnabled(!isChecked);
 				}
 				if (isChecked) autoAssignRoles();
@@ -114,7 +112,7 @@ public class GameSetupActivity extends AbstractActivity {
 				// too many assigned roles, iterate through assigned Roles trying to decrement special roles first
 				if (playerCount < assignedPlayers && !mAutoAssignCb.isChecked()) {
 					int playerSurplus = assignedPlayers - playerCount;
-					ListIterator<NumberPickerView> it = allPickers.listIterator(allPickers.size());
+					ListIterator<NumberPickerView> it = new LinkedList<>(allPickers.values()).listIterator(allPickers.size());
 					while (it.hasPrevious()) {
 						NumberPickerView currentPicker = it.previous();
 						int value = currentPicker.getValue();
@@ -142,7 +140,7 @@ public class GameSetupActivity extends AbstractActivity {
 		};
 
 		mPlayerCountPicker.setOnValueChangeListener(onRoleCountChangeListener);
-		for (NumberPickerView np : allPickers) {
+		for (NumberPickerView np : allPickers.values()) {
 			np.setOnValueChangeListener(onRoleCountChangeListener);
 		}
 
@@ -170,7 +168,7 @@ public class GameSetupActivity extends AbstractActivity {
 
 	private void updatePickersMax() {
 		int unassignedPlayers = getUnassignedPlayerCount();
-		for (NumberPickerView pickerView : allPickers) {
+		for (NumberPickerView pickerView : allPickers.values()) {
 			pickerView.setMaxValue(pickerView.getValue() + unassignedPlayers);
 		}
 	}
@@ -181,7 +179,7 @@ public class GameSetupActivity extends AbstractActivity {
 
 	private int getAssignedPlayerCount() {
 		int playerCount = 0;
-		for (NumberPickerView pickerView : allPickers) {
+		for (NumberPickerView pickerView : allPickers.values()) {
 			playerCount += pickerView.getValue();
 		}
 		return playerCount;
@@ -211,17 +209,8 @@ public class GameSetupActivity extends AbstractActivity {
 
 	private void startGame() {
 		List<Player> players = new ArrayList<>(mPlayerCountPicker.getValue());
-		createPlayers(players, mWerewolfCountPicker, roleFactory.werewolf());
-		createPlayers(players, mVillagerCountPicker, roleFactory.villager());
-		createPlayers(players, mSeerCountPicker, roleFactory.seer());
-		createPlayers(players, mDoctorCountPicker, roleFactory.doctor());
-		createPlayers(players, mHunterCountPicker, roleFactory.hunter());
-		createPlayers(players, mWitchCountPicker, roleFactory.witch());
-		createPlayers(players, mPriestCountPicker, roleFactory.priest());
-		createPlayers(players, mAmorCountPicker, roleFactory.amor());
-		createPlayers(players, mDrunkCountPicker, roleFactory.drunk());
-		for (Map.Entry<Role, NumberPickerView> customRolePicker : customRolePickers.entrySet()) {
-			createPlayers(players, customRolePicker.getValue(), customRolePicker.getKey());
+		for (Map.Entry<Role, NumberPickerView> rolePicker : allPickers.entrySet()) {
+			createPlayers(players, rolePicker.getValue(), rolePicker.getKey());
 		}
 		Collections.shuffle(players);
 		for (int i = 0; i < players.size(); ++i) {
@@ -274,13 +263,12 @@ public class GameSetupActivity extends AbstractActivity {
 		mRolesLayout.addView(roleLayout);
 
 		// init picker
-		allPickers.add(picker);
+		allPickers.put(roleFactory.customRole(newRoleName), picker);
 		specialRolePickers.add(picker);
 		picker.setMinValue(0);
 		if (mAutoAssignCb.isChecked()) picker.setEnabled(false);
 		picker.setOnValueChangeListener(onRoleCountChangeListener);
 		onRoleCountChangeListener.onValueChange(picker, 0, 0);
-		customRolePickers.put(roleFactory.customRole(newRoleName), picker);
 	}
 
 }
