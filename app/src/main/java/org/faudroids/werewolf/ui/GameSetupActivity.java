@@ -241,7 +241,10 @@ public class GameSetupActivity extends AbstractActivity {
 			@Override
 			public InputDialog.ValidationResult isInputValid(String newRoleName) {
 				if (newRoleName.isEmpty()) {
-					return new InputDialog.ValidationResult(false, R.string.error_empty_name);
+					return new InputDialog.ValidationResult(false, R.string.error_empty_role);
+				}
+				for (Role role : allPickers.keySet()) {
+					if (role.getName().equals(newRoleName)) return new InputDialog.ValidationResult(false, R.string.error_duplicate_role);
 				}
 				return new InputDialog.ValidationResult(true, 0);
 			}
