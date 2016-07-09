@@ -54,7 +54,7 @@ public class RoleFactory implements Serializable {
 	}
 
 	public Role customRole(String roleName) {
-		return new Role(R.raw.icon_drunk, roleName, "");
+		return new Role(R.raw.icon_custom_role, roleName, "");
 	}
 
 	private Role newRole(@RawRes int icon, @StringRes int nameId, @StringRes int goalId) {
