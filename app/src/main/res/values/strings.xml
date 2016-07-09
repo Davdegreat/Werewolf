@@ -36,6 +36,7 @@
     <string name="cnf_auto_assign_label">Auto assign roles</string>
     <string name="cnf_start_btn_label">Start Game</string>
     <string name="cnf_x_players_unassigned">%1$d players unassigned</string>
+    <string name="cnf_add_new_role">Add New role</string>
 
     <string name="player_x_of_y">Player %1$d of %2$d</string>
     <string name="change_player_name">Change player name</string>

@@ -23,6 +23,7 @@ import com.eftimoff.androipathview.PathView;
 import org.faudroids.werewolf.R;
 import org.faudroids.werewolf.core.GameManager;
 import org.faudroids.werewolf.core.Player;
+import org.faudroids.werewolf.core.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,12 +121,14 @@ public class ShowRolesActivity extends AbstractActivity {
 				roleLayout.setVisibility(View.VISIBLE);
 
 				// show role text
-				roleNameText.setText(player.getRole().getNameId());
-				roleDescriptionText.setText(player.getRole().getGoalId());
+				Role role = player.getRole();
+				if (role.getName() != null) roleNameText.setText(role.getName());
+				else roleNameText.setText(role.getNameId());
+				roleDescriptionText.setText(role.getGoalId());
 
 				// show role icon
 				assertPathView();
-				iconView.setSvgResource(player.getRole().getIconId());
+				iconView.setSvgResource(role.getIconId());
 				iconView.setPaths(new ArrayList<Path>());
 				iconView.getPathAnimator()
 						.delay(100)

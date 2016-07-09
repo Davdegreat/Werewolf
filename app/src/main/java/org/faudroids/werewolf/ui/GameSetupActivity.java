@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.faudroids.werewolf.R;
@@ -16,8 +18,10 @@ import org.roboguice.shaded.goole.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -31,9 +35,11 @@ public class GameSetupActivity extends AbstractActivity {
 	private static final int DEFAULT_PLAYER_COUNT = 10;
 
 	@InjectView(R.id.cnf_auto_assign_cb) private CheckBox mAutoAssignCb;
+	@InjectView(R.id.cnf_add_role) private Button mAddRoleBtn;
 
 	@InjectView(R.id.cnf_player_count_picker) private NumberPickerView mPlayerCountPicker;
 
+	@InjectView(R.id.cnf_layout_roles) private LinearLayout mRolesLayout;
 	@InjectView(R.id.cnf_werewolf_count_picker) private NumberPickerView mWerewolfCountPicker;
 	@InjectView(R.id.cnf_villager_count_picker) private NumberPickerView mVillagerCountPicker;
 	@InjectView(R.id.cnf_seer_count_picker) private NumberPickerView mSeerCountPicker;
@@ -50,6 +56,9 @@ public class GameSetupActivity extends AbstractActivity {
 
 	private List<NumberPickerView> allPickers;
 	private List<NumberPickerView> specialRolePickers;
+	private final Map<Role, NumberPickerView> customRolePickers = new HashMap<>();
+
+	private NumberPickerView.OnValueChangeListener onRoleCountChangeListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +103,7 @@ public class GameSetupActivity extends AbstractActivity {
 		});
 
 		// setup auto update picker values on picker value change
-		NumberPickerView.OnValueChangeListener listener = new NumberPickerView.OnValueChangeListener() {
+		onRoleCountChangeListener = new NumberPickerView.OnValueChangeListener() {
 			@Override
 			public void onValueChange(NumberPickerView picker, int oldValue, int newValue) {
 				int playerCount = getPlayerCount();
@@ -130,15 +139,23 @@ public class GameSetupActivity extends AbstractActivity {
 			}
 		};
 
-		mPlayerCountPicker.setOnValueChangeListener(listener);
+		mPlayerCountPicker.setOnValueChangeListener(onRoleCountChangeListener);
 		for (NumberPickerView np : allPickers) {
-			np.setOnValueChangeListener(listener);
+			np.setOnValueChangeListener(onRoleCountChangeListener);
 		}
 
 		// default player count
 		mPlayerCountPicker.setMinValue(3);
 		mPlayerCountPicker.setMaxValue(100);
 		mPlayerCountPicker.setValue(DEFAULT_PLAYER_COUNT);
+
+		// setup adding new roles
+		mAddRoleBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onShowNewRoleInput();
+			}
+		});
 
 		// click to start game
 		mStartButton.setOnClickListener(new View.OnClickListener() {
@@ -201,6 +218,9 @@ public class GameSetupActivity extends AbstractActivity {
 		createPlayers(players, mPriestCountPicker, Role.PRIEST);
 		createPlayers(players, mAmorCountPicker, Role.AMOR);
 		createPlayers(players, mDrunkCountPicker, Role.DRUNK);
+		for (Map.Entry<Role, NumberPickerView> customRolePicker : customRolePickers.entrySet()) {
+			createPlayers(players, customRolePicker.getValue(), customRolePicker.getKey());
+		}
 		Collections.shuffle(players);
 		for (int i = 0; i < players.size(); ++i) {
 			Player player = players.get(i);
@@ -223,4 +243,42 @@ public class GameSetupActivity extends AbstractActivity {
 		}
 		return pickerView.getValue();
 	}
+
+	private void onShowNewRoleInput() {
+		InputDialog inputDialog = new InputDialog(this, R.string.cnf_add_new_role);
+		inputDialog.setInputListener(new InputDialog.InputListener() {
+			@Override
+			public InputDialog.ValidationResult isInputValid(String newRoleName) {
+				if (newRoleName.isEmpty()) {
+					return new InputDialog.ValidationResult(false, R.string.error_empty_name);
+				}
+				return new InputDialog.ValidationResult(true, 0);
+			}
+
+			@Override
+			public void onConfirm(String newRoleName) {
+				onAddNewRoleInput(newRoleName);
+			}
+		});
+		inputDialog.show();
+	}
+
+	private void onAddNewRoleInput(String newRoleName) {
+		// setup view
+		View roleLayout = getLayoutInflater().inflate(R.layout.layout_role, null);
+		TextView labelView= (TextView) roleLayout.findViewById(R.id.txt_label);
+		labelView.setText(newRoleName);
+		NumberPickerView picker = (NumberPickerView) roleLayout.findViewById(R.id.picker);
+		mRolesLayout.addView(roleLayout);
+
+		// init picker
+		allPickers.add(picker);
+		specialRolePickers.add(picker);
+		picker.setMinValue(0);
+		if (mAutoAssignCb.isChecked()) picker.setEnabled(false);
+		picker.setOnValueChangeListener(onRoleCountChangeListener);
+		onRoleCountChangeListener.onValueChange(picker, 0, 0);
+		customRolePickers.put(Role.createCustomRole(newRoleName), picker);
+	}
+
 }
