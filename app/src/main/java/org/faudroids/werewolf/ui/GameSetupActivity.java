@@ -236,7 +236,7 @@ public class GameSetupActivity extends AbstractActivity {
 	}
 
 	private void onShowNewRoleInput() {
-		InputDialog inputDialog = new InputDialog(this, R.string.cnf_add_new_role);
+		InputDialog inputDialog = new InputDialog(this, R.string.cnf_add_new_role, R.string.change_player_name_hint);
 		inputDialog.setInputListener(new InputDialog.InputListener() {
 			@Override
 			public InputDialog.ValidationResult isInputValid(String newRoleName) {

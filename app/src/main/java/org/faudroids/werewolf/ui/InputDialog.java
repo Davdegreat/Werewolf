@@ -24,11 +24,12 @@ public class InputDialog {
 
 	private InputListener inputListener = null;
 
-	public InputDialog(Context context, @StringRes int title) {
+	public InputDialog(Context context, @StringRes int title, @StringRes int hint) {
 		this.context = context;
 		this.dialogView = LayoutInflater.from(context).inflate(R.layout.input_dialog, null);
 		this.title = title;
 		this.editText = (EditText) dialogView.findViewById(R.id.input);
+		editText.setHint(hint);
 		this.errorView = (TextView) dialogView.findViewById(R.id.error_txt);
 		this.okBtn = dialogView.findViewById(R.id.btn_ok);
 		this.cancelBtn = dialogView.findViewById(R.id.btn_cancel);

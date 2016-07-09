@@ -261,7 +261,7 @@ public class ShowRolesActivity extends AbstractActivity {
 
 	private void onEditPlayerName() {
 		final Player player = getCurrentPlayer();
-		InputDialog inputDialog = new InputDialog(this, R.string.change_player_name);
+		InputDialog inputDialog = new InputDialog(this, R.string.change_player_name, R.string.change_player_name_hint);
 		inputDialog.setInitialInput(player.getName());
 		inputDialog.setInputListener(new InputDialog.InputListener() {
 			@Override
