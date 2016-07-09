@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import org.faudroids.werewolf.R;
 import org.faudroids.werewolf.core.GameManager;
+import org.faudroids.werewolf.core.MigrationManager;
 
 import javax.inject.Inject;
 
@@ -23,10 +24,13 @@ public class MainActivity extends AbstractActivity {
 	@InjectView(R.id.btn_continue_game) private Button continueGameBtn;
 
 	@Inject private GameManager gameManager;
+	@Inject private MigrationManager migrationManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		migrationManager.onStart();
 
 		newGameBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -55,6 +59,6 @@ public class MainActivity extends AbstractActivity {
 	}
 
 	private void setupContinueBtnVisibility() {
-		continueGameBtn.setVisibility(gameManager.existsOldGame() ? View.VISIBLE : View.GONE);
+		continueGameBtn.setVisibility(gameManager.existsSavedGame() ? View.VISIBLE : View.GONE);
 	}
 }

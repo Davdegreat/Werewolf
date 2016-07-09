@@ -35,7 +35,7 @@ public class GameManager {
     }
 
 
-	public boolean existsOldGame() {
+	public boolean existsSavedGame() {
 		return getPlayersFile().exists();
 	}
 
@@ -82,6 +82,13 @@ public class GameManager {
 			if (player.getName().equalsIgnoreCase(name)) return player;
 		}
 		return null;
+	}
+
+	public void deleteSavedGame() {
+		if (!existsSavedGame()) return;
+		if (!getPlayersFile().delete()) {
+			Timber.w("Failed to delete file %s", getPlayersFile().getAbsolutePath());
+		}
 	}
 
 	private File getPlayersFile() {
