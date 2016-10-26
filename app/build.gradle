@@ -16,13 +16,13 @@ repositories {
 
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
 
     defaultConfig {
         applicationId "org.faudroids.werewolf"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 2
         versionName "0.2.0"
     }
@@ -35,8 +35,8 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:support-annotations:23.1.1'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:support-annotations:24.2.1'
     compile 'com.jakewharton.timber:timber:4.1.0'
     compile 'com.eftimoff:android-pathview:1.0.8@aar'
     compile 'org.roboguice:roboguice:3.0.1'
