@@ -1,9 +1,11 @@
 package org.faudroids.werewolf.ui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import org.faudroids.werewolf.R;
 import org.faudroids.werewolf.core.GameManager;
@@ -22,6 +24,7 @@ public class MainActivity extends AbstractActivity {
 
 	@InjectView(R.id.btn_new_game) private Button newGameBtn;
 	@InjectView(R.id.btn_continue_game) private Button continueGameBtn;
+  @InjectView(R.id.layout_ad) private RelativeLayout myAdventView;
 
 	@Inject private GameManager gameManager;
 	@Inject private MigrationManager migrationManager;
@@ -47,6 +50,13 @@ public class MainActivity extends AbstractActivity {
 				startActivity(new Intent(MainActivity.this, ShowRolesActivity.class));
 			}
 		});
+
+    myAdventView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.myadvent.net/?ref=org.faudroids.werewolf")));
+      }
+    });
 	}
 
 	@Override
